@@ -1,6 +1,6 @@
 package com.ethanco.halo.turbo;
 
-import android.util.Log;
+import static com.ethanco.halo.turbo.utils.Util.println;
 
 /**
  * Created by EthanCo on 2016/9/14.
@@ -10,22 +10,22 @@ public class LogHaloImpl implements IHalo {
 
     @Override
     public void start() {
-        Log.i(TAG, "start...");
+        println(TAG, "start...");
     }
 
     @Override
     public void reStart() {
-        Log.i(TAG, "reStart");
+        println(TAG, "reStart");
     }
 
     @Override
     public void stop() {
-        Log.i(TAG, "stop... ");
+        println(TAG, "stop... ");
     }
 
     @Override
     public void send(byte[] buffer, int offset, int length) {
-        Log.i(TAG, "send : " + HexUtil.bytesToHexString(buffer) + " offset:" + offset + " length:" + length);
+        println(TAG, "send : " + HexUtil.bytesToHexString(buffer) + " offset:" + offset + " length:" + length);
     }
 
     @Override
