@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by EthanCo on 2016/9/14.
  */
-public abstract class absHalo<T> implements IHalo {
+public abstract class absHalo<T> implements ISocket {
 
     protected List<ReceiveListener<T>> mReceiveListeners = new ArrayList<>();
 

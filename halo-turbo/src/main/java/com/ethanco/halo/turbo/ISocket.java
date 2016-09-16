@@ -3,10 +3,8 @@ package com.ethanco.halo.turbo;
 /**
  * Created by EthanCo on 2016/9/14.
  */
-public interface IHalo {
+public interface ISocket {
     void start();
-
-    void reStart();
 
     void stop();
 

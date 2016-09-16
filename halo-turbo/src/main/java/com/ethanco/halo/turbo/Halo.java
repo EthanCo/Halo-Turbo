@@ -8,36 +8,32 @@ import java.util.concurrent.Executors;
  */
 public class Halo extends absHalo {
 
-    private Type type;
-    private Mode mode;
-    private String ip;
-    private int port;
-    private int bufferSize;
-    private ExecutorService threadPool;
-    private IHalo haloImpl;
+    //    private Type type;
+//    private Mode mode;
+//    private String ip;
+//    private int port;
+//    private int bufferSize;
+//    private ExecutorService threadPool;
+    private ISocket haloImpl;
 
     public Halo() {
         this(new Builder());
     }
 
     private Halo(Builder builder) {
-        this.type = builder.type;
-        this.mode = builder.mode;
-        this.ip = builder.ip;
-        this.port = builder.port;
-        this.bufferSize = builder.bufferSize;
-        this.threadPool = builder.threadPool;
+//        this.type = builder.type;
+//        this.mode = builder.mode;
+//        this.ip = builder.ip;
+//        this.port = builder.port;
+//        this.bufferSize = builder.bufferSize;
+//        this.threadPool = builder.threadPool;
         this.haloImpl = builder.ihalo;
+        //haloImpl.init(builder);
     }
 
     @Override
     public void start() {
         haloImpl.start();
-    }
-
-    @Override
-    public void reStart() {
-        haloImpl.reStart();
     }
 
     @Override
@@ -60,14 +56,9 @@ public class Halo extends absHalo {
         haloImpl.send(str);
     }
 
-    public static class Builder {
-        private Type type;
-        private Mode mode;
-        private String ip;
-        private int port;
-        private int bufferSize;
-        private IHalo ihalo;
-        private ExecutorService threadPool;
+    public static class Builder extends Config {
+
+        private ISocket ihalo;
 
         public Builder() {
             this.type = Type.TCP;
@@ -76,7 +67,7 @@ public class Halo extends absHalo {
             this.port = 8800;
             this.bufferSize = 1024;
             this.threadPool = Executors.newCachedThreadPool();
-            this.ihalo = new LogHaloImpl(); //TODO test
+            this.ihalo = new LogHaloImpl(this); //TODO test
         }
 
         public Builder setType(Type type) {
@@ -104,7 +95,7 @@ public class Halo extends absHalo {
             return this;
         }
 
-        public Builder setIhalo(IHalo ihalo) {
+        public Builder setIhalo(ISocket ihalo) {
             this.ihalo = ihalo;
             return this;
         }

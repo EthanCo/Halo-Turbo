@@ -5,8 +5,12 @@ import static com.ethanco.halo.turbo.utils.Util.println;
 /**
  * Created by EthanCo on 2016/9/14.
  */
-public class LogHaloImpl implements IHalo {
+public class LogHaloImpl extends absSocket {
     private static final String TAG = "Z-LogPivotImpl";
+
+    public LogHaloImpl(Config config) {
+        super(config);
+    }
 
     @Override
     public void start() {
@@ -29,12 +33,7 @@ public class LogHaloImpl implements IHalo {
     }
 
     @Override
-    public void send(byte[] buffer) {
-        send(buffer, 0, buffer.length);
-    }
+    public void init(Config config) {
 
-    @Override
-    public void send(String str) {
-        send(str.getBytes());
     }
 }
