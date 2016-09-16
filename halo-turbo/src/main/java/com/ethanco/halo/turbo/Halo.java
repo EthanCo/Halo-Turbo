@@ -61,8 +61,8 @@ public class Halo extends absHalo {
         private ISocket ihalo;
 
         public Builder() {
-            this.type = Type.TCP;
-            this.mode = Mode.CLIENT;
+            //this.type = Type.TCP;
+            this.mode = Mode.TCP_CLIENT;
             this.ip = "192.168.1.1";
             this.port = 8800;
             this.bufferSize = 1024;
@@ -70,10 +70,10 @@ public class Halo extends absHalo {
             this.ihalo = new LogHaloImpl(this); //TODO test
         }
 
-        public Builder setType(Type type) {
-            this.type = type;
+        /*public Builder setType(Type type) {
+            //this.type = type;
             return this;
-        }
+        }*/
 
         public Builder setMode(Mode mode) {
             this.mode = mode;

@@ -3,9 +3,9 @@ package com.ethanco.halo.turbo;
 /**
  * Created by EthanCo on 2016/9/16.
  */
-public class UdpSocket extends absSocket {
+public class UdpClientSocket extends absSocket {
 
-    public UdpSocket(Config config) {
+    public UdpClientSocket(Config config) {
         super(config);
     }
 

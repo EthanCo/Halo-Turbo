@@ -17,8 +17,8 @@ public class HaloTest {
         Halo.Builder builder = new Halo.Builder()
                 .setIp("192.168.2.1")
                 .setPort(8890)
-                .setMode(Mode.SERVICE)
-                .setType(Type.UDP)
+                .setMode(Mode.TCP_CLIENT)
+                //.setType(Type.UDP)
                 .setBufferSize(1024 * 2);
 
         halo = builder.build();

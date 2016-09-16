@@ -18,11 +18,6 @@ public class LogHaloImpl extends absSocket {
     }
 
     @Override
-    public void reStart() {
-        println(TAG, "reStart");
-    }
-
-    @Override
     public void stop() {
         println(TAG, "stop... ");
     }
