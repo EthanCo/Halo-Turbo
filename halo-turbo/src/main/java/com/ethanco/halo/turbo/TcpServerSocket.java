@@ -18,45 +18,15 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
 
     public TcpServerSocket(final Config config) {
         super(config);
-        /*threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    socket = new ServerSocket(config.port);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
     }
-
-    /*@Override
-    public void init(Config config) {
-        try {
-            socket = new ServerSocket(config.port);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 
     @Override
     public void start() {
-        Log.i("Z-", "start : ");
-        for (SocketListener<T> mSocketListener : mSocketListeners) {
-            Log.i("Z-", "start 0.6: ");
-            mSocketListener.onStart();
-        }
+        onStart();
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
-                Log.i("Z-", "start 1: ");
-                if (socket == null) {
-                    try {
-                        socket = new ServerSocket(config.port);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                init();
 
                 Socket sendSocket;
                 while (true) { //TODO flag
@@ -66,18 +36,32 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
                         // 接收客户端信息
                         InputStream in = sendSocket.getInputStream();
                         readStream(in);
-                        synchronized (this) {
+                        synchronized (TcpServerSocket.this) {
                             outputStream = sendSocket.getOutputStream();
                         }
                     } catch (Exception e) {
-                       /* beginReceive(MAX_BUFFER_SIZE);
-                        Log.e(TAG, "run-> error: " + e.getMessage());
-                        //receiveIsBegin = false;
-                        e.printStackTrace();*/
+                        e.printStackTrace();
+                        //TODO 重试机制
                     }
                 }
             }
         });
+    }
+
+    private void onStart() {
+        for (SocketListener<T> mSocketListener : mSocketListeners) {
+            mSocketListener.onStart();
+        }
+    }
+
+    private void init() {
+        if (socket == null) {
+            try {
+                socket = new ServerSocket(config.port);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -86,9 +70,7 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
             return;
         }
 
-        for (SocketListener<T> mSocketListener : mSocketListeners) {
-            mSocketListener.onStart();
-        }
+        onStop();
 
         try {
             if (outputStream != null) {
@@ -101,20 +83,31 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
         }
     }
 
-    @Override
-    public void send(byte[] buffer, int offset, int length) {
-        synchronized (this) {
-            if (null != outputStream) {
-                try {
-                    DataOutputStream out = new DataOutputStream(outputStream);
-                    out.write(buffer, offset, length);
-                    out.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    //CloseUtils.closeQuietly(out);
-                }
-            }
+    private void onStop() {
+        for (SocketListener<T> mSocketListener : mSocketListeners) {
+            mSocketListener.onStop();
         }
+    }
+
+    @Override
+    public void send(final byte[] buffer, final int offset, final int length) {
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (TcpServerSocket.this) {
+                    if (null != outputStream) {
+                        try {
+                            DataOutputStream out = new DataOutputStream(outputStream);
+                            out.write(buffer, offset, length);
+                            out.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            //TODO 重试机制
+                        }
+                    }
+                }
+
+            }
+        });
     }
 }

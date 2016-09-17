@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
  */
 public class Halo extends absHalo {
 
-    //    private Type type;
+    //private Type type;
 //    private Mode mode;
 //    private String ip;
 //    private int port;
