@@ -3,7 +3,7 @@ package com.ethanco.halo.turbo;
 /**
  * Created by EthanCo on 2016/9/14.
  */
-public interface ISocket {
+public interface ISocket<T> {
     void start();
 
     void stop();
@@ -15,4 +15,18 @@ public interface ISocket {
     void send(final String str);
 
     //void send(final Object obj);
+
+    interface ReceiveListener<T> {
+        void onReceive(T buffer);
+    }
+
+    void addReceiveListener(ReceiveListener<T> receiveListener);
+
+    interface SocketListener<T> extends ReceiveListener<T> {
+        void onStart();
+
+        void onStop();
+    }
+
+    void addSocketListener(SocketListener socketListener);
 }

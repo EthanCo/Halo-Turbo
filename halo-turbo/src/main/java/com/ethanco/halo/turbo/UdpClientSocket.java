@@ -9,10 +9,10 @@ public class UdpClientSocket extends absSocket {
         super(config);
     }
 
-    @Override
+    /*@Override
     public void init(Config config) {
 
-    }
+    }*/
 
     @Override
     public void start() {

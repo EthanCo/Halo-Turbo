@@ -27,7 +27,15 @@ public class Halo extends absHalo {
 //        this.port = builder.port;
 //        this.bufferSize = builder.bufferSize;
 //        this.threadPool = builder.threadPool;
-        this.haloImpl = builder.ihalo;
+        Mode mode = builder.mode;
+        this.haloImpl = null;
+        if (mode == Mode.TCP_CLIENT) {
+            this.haloImpl = new ByteTcpClientSocket(builder);
+        } else if (mode == Mode.TCP_SERVICE) {
+            this.haloImpl = new ByteTcpServerSocket(builder);
+        } else {
+            this.haloImpl = new LogHaloImpl(builder); //TODO test
+        }
         //haloImpl.init(builder);
     }
 
@@ -56,6 +64,16 @@ public class Halo extends absHalo {
         haloImpl.send(str);
     }
 
+    @Override
+    public void addReceiveListener(ReceiveListener receiveListener) {
+        haloImpl.addReceiveListener(receiveListener);
+    }
+
+    @Override
+    public void addSocketListener(SocketListener socketListener) {
+        haloImpl.addSocketListener(socketListener);
+    }
+
     public static class Builder extends Config {
 
         private ISocket ihalo;
@@ -67,7 +85,6 @@ public class Halo extends absHalo {
             this.port = 8800;
             this.bufferSize = 1024;
             this.threadPool = Executors.newCachedThreadPool();
-            this.ihalo = new LogHaloImpl(this); //TODO test
         }
 
         /*public Builder setType(Type type) {

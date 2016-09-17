@@ -27,8 +27,8 @@ public class LogHaloImpl extends absSocket {
         println(TAG, "send : " + HexUtil.bytesToHexString(buffer) + " offset:" + offset + " length:" + length);
     }
 
-    @Override
+    /*@Override
     public void init(Config config) {
 
-    }
+    }*/
 }

@@ -1,5 +1,7 @@
 package com.ethanco.halo.turbo;
 
+import android.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -28,17 +30,21 @@ public abstract class BaseTcpSocket<T> extends absSocket<T> {
      * @throws Exception
      */
     protected void readStream(final InputStream inStream) {
-        threadPool.execute(new Runnable() {
-            @Override
-            public void run() {
+        //threadPool.execute(new Runnable() {
+//            @Override
+//            public void run() {
                 ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
                 DataInputStream dis = new DataInputStream(inStream);
                 byte[] buffer = new byte[bufferSize];
                 int len = -1;
                 try {
+
+                    Log.i("Z-", "run read: ");
                     while ((len = dis.read(buffer)) != -1) {
                         outSteam.write(buffer, 0, len);
                         byte[] data = outSteam.toByteArray();
+
+                        Log.i("Z-", "run : " + HexUtil.bytesToHexString(data));
 
                         T t = convert(data);
 
@@ -60,8 +66,8 @@ public abstract class BaseTcpSocket<T> extends absSocket<T> {
                     }*/
                 }
             }
-        });
-    }
+        //});
+    //}
 
     abstract T convert(byte[] data);
 }
