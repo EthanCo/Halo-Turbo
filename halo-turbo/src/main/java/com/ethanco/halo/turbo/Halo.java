@@ -65,6 +65,11 @@ public class Halo extends absHalo {
     }
 
     @Override
+    public boolean isRunning() {
+        return haloImpl.isRunning();
+    }
+
+    @Override
     public void addReceiveListener(ReceiveListener receiveListener) {
         haloImpl.addReceiveListener(receiveListener);
     }

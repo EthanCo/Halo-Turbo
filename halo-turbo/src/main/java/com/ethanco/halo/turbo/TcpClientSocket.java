@@ -1,5 +1,7 @@
 package com.ethanco.halo.turbo;
 
+import android.os.SystemClock;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,7 +12,6 @@ import java.net.Socket;
  */
 public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
     private Socket socket;
-    private OutputStream outputStream;
 
     public TcpClientSocket(final Config config) {
         super(config);
@@ -23,16 +24,12 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
             @Override
             public void run() {
                 try {
-                    synchronized (TcpClientSocket.this) {
-                        init();
-                        outputStream = socket.getOutputStream();
-                    }
+                    init();
                     readStream(socket.getInputStream());
                 } catch (IOException e) {
                     e.printStackTrace();
                     //TODO 重试机制
                 }
-                //}
             }
         });
     }
@@ -47,6 +44,7 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
         if (socket == null) {
             try {
                 socket = new Socket(config.ip, config.port);
+                runningFlag = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -55,6 +53,7 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
 
     @Override
     public void stop() {
+        super.stop();
         if (socket == null) {
             return;
         }
@@ -62,9 +61,7 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
         onStop();
 
         try {
-            if (outputStream != null) {
-                outputStream.close();
-            }
+            runningFlag = false;
             socket.close();
             socket = null;
         } catch (IOException e) {
@@ -83,24 +80,18 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
-                synchronized (TcpClientSocket.this) {
-                    if (outputStream == null) {
-                        try {
-                            TcpClientSocket.this.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                try {
+                    if (socket == null)
+                        SystemClock.sleep(200);
+                    OutputStream outputStream = socket.getOutputStream();
                     if (null != outputStream) {
-                        try {
-                            DataOutputStream out = new DataOutputStream(outputStream);
-                            out.write(buffer, offset, length);
-                            out.flush();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            //TODO 重试机制
-                        }
+                        DataOutputStream out = new DataOutputStream(outputStream);
+                        out.write(buffer, offset, length);
+                        out.flush();
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    //TODO 重试机制
                 }
             }
         });

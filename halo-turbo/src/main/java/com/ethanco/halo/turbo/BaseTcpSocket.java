@@ -1,5 +1,8 @@
 package com.ethanco.halo.turbo;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -13,8 +16,33 @@ import java.util.concurrent.ExecutorService;
  */
 public abstract class BaseTcpSocket<T> extends absSocket<T> {
 
+    public static final int WHAT_ONREVEIVE = 3435;
     protected final ExecutorService threadPool;
     protected final int bufferSize;
+
+    protected Handler H = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == WHAT_ONREVEIVE) {
+                T t = (T) msg.obj;
+                for (ReceiveListener<T> mReceiveListener : mReceiveListeners) {
+                    mReceiveListener.onReceive(t);
+                }
+
+                for (SocketListener<T> mSocketListener : mSocketListeners) {
+                    mSocketListener.onReceive(t);
+                }
+            }
+        }
+    };
+
+    @Override
+    public void stop() {
+        if (H != null) {
+            H.removeCallbacksAndMessages(null);
+        }
+    }
 
     public BaseTcpSocket(Config config) {
         super(config);
@@ -33,40 +61,33 @@ public abstract class BaseTcpSocket<T> extends absSocket<T> {
         //threadPool.execute(new Runnable() {
 //            @Override
 //            public void run() {
-                ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
-                DataInputStream dis = new DataInputStream(inStream);
-                byte[] buffer = new byte[bufferSize];
-                int len = -1;
-                try {
+        ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+        DataInputStream dis = new DataInputStream(inStream);
+        byte[] buffer = new byte[bufferSize];
+        int len = -1;
+        try {
 
-                    Log.i("Z-", "run read: ");
-                    while ((len = dis.read(buffer)) != -1) {
-                        outSteam.write(buffer, 0, len);
-                        byte[] data = outSteam.toByteArray();
+            Log.i("Z-", "run read: ");
+            while ((len = dis.read(buffer)) != -1) {
+                outSteam.write(buffer, 0, len);
+                byte[] data = outSteam.toByteArray();
 
-                        Log.i("Z-", "run : " + HexUtil.bytesToHexString(data));
+                Log.i("Z-", "run : " + HexUtil.bytesToHexString(data));
 
-                        T t = convert(data);
+                T t = convert(data);
+                Message.obtain(H, WHAT_ONREVEIVE, t).sendToTarget();
 
-                        for (ReceiveListener<T> mReceiveListener : mReceiveListeners) {
-                            mReceiveListener.onReceive(t);
-                        }
-
-                        for (SocketListener<T> mSocketListener : mSocketListeners) {
-                            mSocketListener.onReceive(t);
-                        }
-
-                        outSteam.flush();
-                        outSteam.reset();
-                    }
-                } catch (IOException e) {
+                outSteam.flush();
+                outSteam.reset();
+            }
+        } catch (IOException e) {
                     /*if (clientCanReceive) {
                         clientCanReceive = false;
                         beginReceive(MAX_BUFFER_SIZE);
                     }*/
-                }
-            }
-        //});
+        }
+    }
+    //});
     //}
 
     abstract T convert(byte[] data);

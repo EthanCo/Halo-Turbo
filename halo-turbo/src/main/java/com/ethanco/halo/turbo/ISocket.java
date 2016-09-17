@@ -14,6 +14,8 @@ public interface ISocket<T> {
 
     void send(final String str);
 
+    boolean isRunning();
+
     //void send(final Object obj);
 
     interface ReceiveListener<T> {

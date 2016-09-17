@@ -1,7 +1,5 @@
 package com.ethanco.halo.turbo;
 
-import android.util.Log;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +12,7 @@ import java.net.Socket;
  */
 public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
     private ServerSocket socket;
-    private OutputStream outputStream;
+    private Socket sendSocket;
 
     public TcpServerSocket(final Config config) {
         super(config);
@@ -28,17 +26,11 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
             public void run() {
                 init();
 
-                Socket sendSocket;
-                while (true) { //TODO flag
+                while (runningFlag) { //TODO flag
                     try {
                         sendSocket = socket.accept();
-                        Log.i("Z-", "start accept: ");
-                        // 接收客户端信息
                         InputStream in = sendSocket.getInputStream();
                         readStream(in);
-                        synchronized (TcpServerSocket.this) {
-                            outputStream = sendSocket.getOutputStream();
-                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         //TODO 重试机制
@@ -58,6 +50,7 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
         if (socket == null) {
             try {
                 socket = new ServerSocket(config.port);
+                runningFlag = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -66,6 +59,7 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
 
     @Override
     public void stop() {
+        super.stop();
         if (socket == null) {
             return;
         }
@@ -73,9 +67,7 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
         onStop();
 
         try {
-            if (outputStream != null) {
-                outputStream.close();
-            }
+            runningFlag = false;
             socket.close();
             socket = null;
         } catch (IOException e) {
@@ -94,19 +86,19 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
-                synchronized (TcpServerSocket.this) {
+                try {
+                    init();
+                    OutputStream outputStream = sendSocket.getOutputStream();
                     if (null != outputStream) {
-                        try {
-                            DataOutputStream out = new DataOutputStream(outputStream);
-                            out.write(buffer, offset, length);
-                            out.flush();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            //TODO 重试机制
-                        }
-                    }
-                }
+                        DataOutputStream out = new DataOutputStream(outputStream);
+                        out.write(buffer, offset, length);
+                        out.flush();
 
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    //TODO 重试机制
+                }
             }
         });
     }
