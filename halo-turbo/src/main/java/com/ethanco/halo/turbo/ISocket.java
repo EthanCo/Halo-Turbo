@@ -24,11 +24,23 @@ public interface ISocket<T> {
 
     void addReceiveListener(ReceiveListener<T> receiveListener);
 
-    interface SocketListener<T> extends ReceiveListener<T> {
-        void onStart();
+    interface StateListener {
+        void onStarted();
 
-        void onStop();
+        void onStoped();
     }
 
-    void addSocketListener(SocketListener socketListener);
+    void addStateListener(StateListener socketListener);
+
+    interface ErrorListener {
+        void onError(Error error, Exception exception);
+    }
+
+    void addErrorListener(ErrorListener errorListener);
+
+    interface SocketListener<T> extends ReceiveListener<T>, StateListener, ErrorListener {
+
+    }
+
+    void addSocketListener(SocketListener<T> socketListener);
 }

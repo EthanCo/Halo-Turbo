@@ -19,7 +19,7 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
 
     @Override
     public void start() {
-        onStart();
+        onStarted();
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
@@ -29,16 +29,10 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
                     state = State.STARTED;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    //TODO 重试机制
+                    onError(Error.CLIENT_START, e);
                 }
             }
         });
-    }
-
-    private void onStart() {
-        for (SocketListener<T> mSocketListener : mSocketListeners) {
-            mSocketListener.onStart();
-        }
     }
 
     private void init() {
@@ -49,6 +43,7 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
                 state = State.STARTED;
             } catch (IOException e) {
                 e.printStackTrace();
+                onError(Error.CLIENT_INIT, e);
             }
         }
     }
@@ -60,7 +55,7 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
             return;
         }
 
-        onStop();
+        onStoped();
 
         try {
             state = State.STOPING;
@@ -70,12 +65,6 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
             e.printStackTrace();
         } finally {
             state = State.STOPED;
-        }
-    }
-
-    private void onStop() {
-        for (SocketListener<T> mSocketListener : mSocketListeners) {
-            mSocketListener.onStop();
         }
     }
 
@@ -94,7 +83,7 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    //TODO 重试机制
+                    onError(Error.CLIENT_SEND, e);
                 }
             }
         });

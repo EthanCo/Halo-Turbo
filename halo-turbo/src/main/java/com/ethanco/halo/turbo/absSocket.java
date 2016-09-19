@@ -22,8 +22,6 @@ public abstract class absSocket<T> implements ISocket<T> {
         return this.state == State.STARTED;
     }
 
-    //public abstract void init(Config config);
-
     @Override
     public void send(byte[] buffer) {
         send(buffer, 0, buffer.length);
@@ -36,9 +34,6 @@ public abstract class absSocket<T> implements ISocket<T> {
 
     protected List<ReceiveListener<T>> mReceiveListeners = new ArrayList<>();
 
-    /*interface ReceiveListener<T> {
-        void onReceive(T buffer);
-    }*/
 
     public void addReceiveListener(ReceiveListener<T> receiveListener) {
         if (!mReceiveListeners.contains(receiveListener)) {
@@ -46,18 +41,47 @@ public abstract class absSocket<T> implements ISocket<T> {
         }
     }
 
-    protected List<SocketListener<T>> mSocketListeners = new ArrayList<>();
+    protected List<StateListener> mStateListeners = new ArrayList<>();
 
-    /*interface SocketListener<T> extends ReceiveListener<T> {
-        void onStart();
-
-        void onStop();
-    }*/
-
-    @Override
-    public void addSocketListener(SocketListener socketListener) {
-        if (!mSocketListeners.contains(socketListener)) {
-            mSocketListeners.add(socketListener);
+    protected void onStarted() {
+        for (StateListener mSocketListener : mStateListeners) {
+            mSocketListener.onStarted();
         }
     }
+
+    protected void onStoped() {
+        for (StateListener mSocketListener : mStateListeners) {
+            mSocketListener.onStoped();
+        }
+    }
+
+    @Override
+    public void addStateListener(StateListener socketListener) {
+        if (!mStateListeners.contains(socketListener)) {
+            mStateListeners.add(socketListener);
+        }
+    }
+
+    protected List<ErrorListener> mErrorListeners = new ArrayList<>();
+
+    protected void onError(Error error, Exception e) {
+        for (ErrorListener mErrorListener : mErrorListeners) {
+            mErrorListener.onError(error, e);
+        }
+    }
+
+    @Override
+    public void addErrorListener(ErrorListener errorListener) {
+        if (!mErrorListeners.contains(errorListener)) {
+            mErrorListeners.add(errorListener);
+        }
+    }
+
+    @Override
+    public void addSocketListener(SocketListener<T> socketListener) {
+        addReceiveListener(socketListener);
+        addStateListener(socketListener);
+        addErrorListener(socketListener);
+    }
+
 }

@@ -54,8 +54,8 @@ public class Halo extends absHalo {
     }
 
     @Override
-    public void addSocketListener(SocketListener socketListener) {
-        haloImpl.addSocketListener(socketListener);
+    public void addStateListener(StateListener socketListener) {
+        haloImpl.addStateListener(socketListener);
     }
 
     public static class Builder extends Config {
