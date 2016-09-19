@@ -26,6 +26,7 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
                 try {
                     init();
                     readStream(socket.getInputStream());
+                    state = State.STARTED;
                 } catch (IOException e) {
                     e.printStackTrace();
                     //TODO 重试机制
@@ -41,10 +42,11 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
     }
 
     private void init() {
-        if (socket == null) {
+        if (!isRunning()) {
             try {
+                state = State.STARTING;
                 socket = new Socket(config.ip, config.port);
-                runningFlag = true;
+                state = State.STARTED;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -54,18 +56,20 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
     @Override
     public void stop() {
         super.stop();
-        if (socket == null) {
+        if (state == State.STOPED) {
             return;
         }
 
         onStop();
 
         try {
-            runningFlag = false;
+            state = State.STOPING;
             socket.close();
             socket = null;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            state = State.STOPED;
         }
     }
 
@@ -81,8 +85,7 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
             @Override
             public void run() {
                 try {
-                    if (socket == null)
-                        SystemClock.sleep(200);
+                    if (!reSleep(50, 0, 1000)) return;
                     OutputStream outputStream = socket.getOutputStream();
                     if (null != outputStream) {
                         DataOutputStream out = new DataOutputStream(outputStream);
@@ -95,5 +98,18 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
                 }
             }
         });
+    }
+
+    private boolean reSleep(int interval, int currBlock, final int maxBlock) {
+        if (isRunning()) {
+            return true;
+        }
+        SystemClock.sleep(interval);
+        currBlock += interval;
+        if (currBlock >= maxBlock) {
+            return false;
+        } else {
+            return reSleep(interval, currBlock, maxBlock);
+        }
     }
 }

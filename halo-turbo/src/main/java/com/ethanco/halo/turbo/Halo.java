@@ -8,12 +8,6 @@ import java.util.concurrent.Executors;
  */
 public class Halo extends absHalo {
 
-    //private Type type;
-//    private Mode mode;
-//    private String ip;
-//    private int port;
-//    private int bufferSize;
-//    private ExecutorService threadPool;
     private ISocket haloImpl;
 
     public Halo() {
@@ -21,22 +15,7 @@ public class Halo extends absHalo {
     }
 
     private Halo(Builder builder) {
-//        this.type = builder.type;
-//        this.mode = builder.mode;
-//        this.ip = builder.ip;
-//        this.port = builder.port;
-//        this.bufferSize = builder.bufferSize;
-//        this.threadPool = builder.threadPool;
-        Mode mode = builder.mode;
-        this.haloImpl = null;
-        if (mode == Mode.TCP_CLIENT) {
-            this.haloImpl = new ByteTcpClientSocket(builder);
-        } else if (mode == Mode.TCP_SERVICE) {
-            this.haloImpl = new ByteTcpServerSocket(builder);
-        } else {
-            this.haloImpl = new LogHaloImpl(builder); //TODO test
-        }
-        //haloImpl.init(builder);
+        this.haloImpl = SocketFactory.create(builder);
     }
 
     @Override

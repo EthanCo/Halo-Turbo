@@ -26,7 +26,7 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
             public void run() {
                 init();
 
-                while (runningFlag) { //TODO flag
+                while (isRunning()) {
                     try {
                         sendSocket = socket.accept();
                         InputStream in = sendSocket.getInputStream();
@@ -47,10 +47,11 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
     }
 
     private void init() {
-        if (socket == null) {
+        if (!isRunning()) {
             try {
+                state = State.STARTING;
                 socket = new ServerSocket(config.port);
-                runningFlag = true;
+                state = State.STARTED;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -60,18 +61,20 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
     @Override
     public void stop() {
         super.stop();
-        if (socket == null) {
+        if (state == State.STOPED) {
             return;
         }
 
         onStop();
 
         try {
-            runningFlag = false;
+            state = State.STOPING;
             socket.close();
             socket = null;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            state = State.STOPED;
         }
     }
 

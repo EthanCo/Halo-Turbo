@@ -8,8 +8,8 @@ import java.util.List;
  */
 public abstract class absSocket<T> implements ISocket<T> {
     protected Config config;
-    //是否正在运行 true运行状态 false停止状态
-    protected boolean runningFlag = false;
+    //运行状态
+    protected State state = State.STOPED;
 
     public absSocket(Config config) {
         this.config = config;
@@ -18,7 +18,8 @@ public abstract class absSocket<T> implements ISocket<T> {
 
     @Override
     public boolean isRunning() {
-        return runningFlag;
+        //默认以State判断，可重写
+        return this.state == State.STARTED;
     }
 
     //public abstract void init(Config config);
