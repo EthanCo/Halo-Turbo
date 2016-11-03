@@ -1,6 +1,8 @@
-package com.ethanco.halo.turbo;
+package com.ethanco.halo.turbo.impl;
 
 import android.os.SystemClock;
+
+import com.ethanco.halo.turbo.bean.Config;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

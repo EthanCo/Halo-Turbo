@@ -1,4 +1,6 @@
-package com.ethanco.halo.turbo;
+package com.ethanco.halo.turbo.impl;
+
+import com.ethanco.halo.turbo.bean.Config;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

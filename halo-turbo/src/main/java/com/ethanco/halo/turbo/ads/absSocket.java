@@ -1,4 +1,6 @@
-package com.ethanco.halo.turbo;
+package com.ethanco.halo.turbo.ads;
+
+import com.ethanco.halo.turbo.bean.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +15,12 @@ public abstract class absSocket<T> implements ISocket<T> {
 
     public absSocket(Config config) {
         this.config = config;
-        //init(config);
     }
 
     @Override
     public boolean isRunning() {
         return runningFlag;
     }
-
-    //public abstract void init(Config config);
 
     @Override
     public void send(byte[] buffer) {
@@ -35,10 +34,6 @@ public abstract class absSocket<T> implements ISocket<T> {
 
     protected List<ReceiveListener<T>> mReceiveListeners = new ArrayList<>();
 
-    /*interface ReceiveListener<T> {
-        void onReceive(T buffer);
-    }*/
-
     public void addReceiveListener(ReceiveListener<T> receiveListener) {
         if (!mReceiveListeners.contains(receiveListener)) {
             mReceiveListeners.add(receiveListener);
@@ -46,12 +41,6 @@ public abstract class absSocket<T> implements ISocket<T> {
     }
 
     protected List<SocketListener<T>> mSocketListeners = new ArrayList<>();
-
-    /*interface SocketListener<T> extends ReceiveListener<T> {
-        void onStart();
-
-        void onStop();
-    }*/
 
     @Override
     public void addSocketListener(SocketListener socketListener) {

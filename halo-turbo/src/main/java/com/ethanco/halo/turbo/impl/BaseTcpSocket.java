@@ -1,9 +1,13 @@
-package com.ethanco.halo.turbo;
+package com.ethanco.halo.turbo.impl;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+
+import com.ethanco.halo.turbo.ads.absSocket;
+import com.ethanco.halo.turbo.bean.Config;
+import com.ethanco.halo.turbo.utils.HexUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -58,9 +62,6 @@ public abstract class BaseTcpSocket<T> extends absSocket<T> {
      * @throws Exception
      */
     protected void readStream(final InputStream inStream) {
-        //threadPool.execute(new Runnable() {
-//            @Override
-//            public void run() {
         ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
         DataInputStream dis = new DataInputStream(inStream);
         byte[] buffer = new byte[bufferSize];
@@ -81,14 +82,10 @@ public abstract class BaseTcpSocket<T> extends absSocket<T> {
                 outSteam.reset();
             }
         } catch (IOException e) {
-                    /*if (clientCanReceive) {
-                        clientCanReceive = false;
-                        beginReceive(MAX_BUFFER_SIZE);
-                    }*/
+            e.printStackTrace();
+            //TODO error处理
         }
     }
-    //});
-    //}
 
     abstract T convert(byte[] data);
 }

@@ -1,5 +1,7 @@
 package com.ethanco.halo.turbo;
 
+import com.ethanco.halo.turbo.type.Mode;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.robolectric.annotation.Config;

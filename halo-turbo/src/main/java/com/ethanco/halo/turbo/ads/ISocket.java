@@ -1,4 +1,4 @@
-package com.ethanco.halo.turbo;
+package com.ethanco.halo.turbo.ads;
 
 /**
  * Created by EthanCo on 2016/9/14.
@@ -15,8 +15,6 @@ public interface ISocket<T> {
     void send(final String str);
 
     boolean isRunning();
-
-    //void send(final Object obj);
 
     interface ReceiveListener<T> {
         void onReceive(T buffer);

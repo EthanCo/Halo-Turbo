@@ -7,8 +7,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.ethanco.halo.turbo.Halo;
-import com.ethanco.halo.turbo.ISocket;
-import com.ethanco.halo.turbo.Mode;
+import com.ethanco.halo.turbo.ads.ISocket;
+import com.ethanco.halo.turbo.type.Mode;
 import com.ethanco.sample.databinding.ActivityMainBinding;
 
 import java.util.Date;
