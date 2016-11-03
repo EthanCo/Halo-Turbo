@@ -3,9 +3,6 @@ package com.ethanco.halo.turbo;
 import com.ethanco.halo.turbo.ads.ISocket;
 import com.ethanco.halo.turbo.ads.absHalo;
 import com.ethanco.halo.turbo.bean.Config;
-import com.ethanco.halo.turbo.impl.ByteTcpClientSocket;
-import com.ethanco.halo.turbo.impl.ByteTcpServerSocket;
-import com.ethanco.halo.turbo.impl.LogHaloImpl;
 import com.ethanco.halo.turbo.type.Mode;
 
 import java.util.concurrent.ExecutorService;
@@ -64,6 +61,16 @@ public class Halo extends absHalo {
     @Override
     public void addStateListener(StateListener socketListener) {
         haloImpl.addStateListener(socketListener);
+    }
+
+    @Override
+    public void addErrorListener(ErrorListener errorListener) {
+        haloImpl.addErrorListener(errorListener);
+    }
+
+    @Override
+    public void addSocketListener(SocketListener socketListener) {
+        haloImpl.addSocketListener(socketListener);
     }
 
     public static class Builder extends Config {
