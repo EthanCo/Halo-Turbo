@@ -21,34 +21,31 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
 
     @Override
     public void start() {
-        onStart();
+        onStarted();
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
                 try {
                     init();
                     readStream(socket.getInputStream());
+                    state = State.STARTED;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    //TODO 重试机制
+                    onError(Error.CLIENT_START, e);
                 }
             }
         });
     }
 
-    private void onStart() {
-        for (SocketListener<T> mSocketListener : mSocketListeners) {
-            mSocketListener.onStart();
-        }
-    }
-
     private void init() {
-        if (socket == null) {
+        if (!isRunning()) {
             try {
+                state = State.STARTING;
                 socket = new Socket(config.ip, config.port);
-                runningFlag = true;
+                state = State.STARTED;
             } catch (IOException e) {
                 e.printStackTrace();
+                onError(Error.CLIENT_INIT, e);
             }
         }
     }
@@ -56,24 +53,20 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
     @Override
     public void stop() {
         super.stop();
-        if (socket == null) {
+        if (state == State.STOPED) {
             return;
         }
 
-        onStop();
+        onStoped();
 
         try {
-            runningFlag = false;
+            state = State.STOPING;
             socket.close();
             socket = null;
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void onStop() {
-        for (SocketListener<T> mSocketListener : mSocketListeners) {
-            mSocketListener.onStop();
+        } finally {
+            state = State.STOPED;
         }
     }
 
@@ -83,8 +76,7 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
             @Override
             public void run() {
                 try {
-                    if (socket == null)
-                        SystemClock.sleep(200);
+                    if (!reSleep(50, 0, 1000)) return;
                     OutputStream outputStream = socket.getOutputStream();
                     if (null != outputStream) {
                         DataOutputStream out = new DataOutputStream(outputStream);
@@ -93,9 +85,22 @@ public abstract class TcpClientSocket<T> extends BaseTcpSocket<T> {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    //TODO 重试机制
+                    onError(Error.CLIENT_SEND, e);
                 }
             }
         });
+    }
+
+    private boolean reSleep(int interval, int currBlock, final int maxBlock) {
+        if (isRunning()) {
+            return true;
+        }
+        SystemClock.sleep(interval);
+        currBlock += interval;
+        if (currBlock >= maxBlock) {
+            return false;
+        } else {
+            return reSleep(interval, currBlock, maxBlock);
+        }
     }
 }

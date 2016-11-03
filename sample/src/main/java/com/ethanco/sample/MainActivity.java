@@ -73,17 +73,18 @@ public class MainActivity extends AppCompatActivity {
                 .setBufferSize(1024);
 
         server = builder.build();
-        server.addSocketListener(new ISocket.SocketListener() {
+        server.addStateListener(new ISocket.StateListener() {
             @Override
-            public void onStart() {
-                Log.i(TAG, "server onStart : ");
+            public void onStarted() {
+                Log.i(TAG, "server onStarted : ");
             }
 
             @Override
-            public void onStop() {
-                Log.i(TAG, "server onStop : ");
+            public void onStoped() {
+                Log.i(TAG, "server onStoped : ");
             }
-
+        });
+        server.addReceiveListener(new ISocket.ReceiveListener() {
             @Override
             public void onReceive(Object buffer) {
                 Log.i(TAG, "server onReceive : " + new String((byte[]) buffer));
@@ -101,17 +102,18 @@ public class MainActivity extends AppCompatActivity {
                 .setBufferSize(1024);
 
         client = builder.build();
-        client.addSocketListener(new ISocket.SocketListener() {
+        client.addStateListener(new ISocket.StateListener() {
             @Override
-            public void onStart() {
-                Log.i(TAG, "client onStart : ");
+            public void onStarted() {
+                Log.i(TAG, "client onStarted : ");
             }
 
             @Override
-            public void onStop() {
-                Log.i(TAG, "client onStop : ");
+            public void onStoped() {
+                Log.i(TAG, "client onStoped : ");
             }
-
+        });
+        client.addReceiveListener(new ISocket.ReceiveListener() {
             @Override
             public void onReceive(Object buffer) {
                 Log.i(TAG, "client onReceive : " + new String((byte[]) buffer));

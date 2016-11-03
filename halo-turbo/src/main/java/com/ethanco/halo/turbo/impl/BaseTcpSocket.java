@@ -34,9 +34,9 @@ public abstract class BaseTcpSocket<T> extends absSocket<T> {
                     mReceiveListener.onReceive(t);
                 }
 
-                for (SocketListener<T> mSocketListener : mSocketListeners) {
+                /*for (StateListener mSocketListener : mStateListeners) {
                     mSocketListener.onReceive(t);
-                }
+                }*/
             }
         }
     };

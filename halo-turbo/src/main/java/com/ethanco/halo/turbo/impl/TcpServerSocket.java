@@ -22,39 +22,35 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
 
     @Override
     public void start() {
-        onStart();
+        onStarted();
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
                 init();
 
-                while (runningFlag) { //TODO flag
+                while (isRunning()) {
                     try {
                         sendSocket = socket.accept();
                         InputStream in = sendSocket.getInputStream();
                         readStream(in);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        //TODO 重试机制
+                        onError(Error.SERVER_RECEIVE, e);
                     }
                 }
             }
         });
     }
 
-    private void onStart() {
-        for (SocketListener<T> mSocketListener : mSocketListeners) {
-            mSocketListener.onStart();
-        }
-    }
-
     private void init() {
-        if (socket == null) {
+        if (!isRunning()) {
             try {
+                state = State.STARTING;
                 socket = new ServerSocket(config.port);
-                runningFlag = true;
+                state = State.STARTED;
             } catch (IOException e) {
                 e.printStackTrace();
+                onError(Error.SERVER_INIT, e);
             }
         }
     }
@@ -62,24 +58,20 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
     @Override
     public void stop() {
         super.stop();
-        if (socket == null) {
+        if (state == State.STOPED) {
             return;
         }
 
-        onStop();
+        onStoped();
 
         try {
-            runningFlag = false;
+            state = State.STOPING;
             socket.close();
             socket = null;
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void onStop() {
-        for (SocketListener<T> mSocketListener : mSocketListeners) {
-            mSocketListener.onStop();
+        } finally {
+            state = State.STOPED;
         }
     }
 
@@ -99,7 +91,7 @@ public abstract class TcpServerSocket<T> extends BaseTcpSocket<T> {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    //TODO 重试机制
+                    onError(Error.SERVER_SEND, e);
                 }
             }
         });
