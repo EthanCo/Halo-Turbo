@@ -1,44 +1,18 @@
 package com.ethanco.halo.turbo.ads;
 
+import java.io.IOException;
+
 /**
  * Created by EthanCo on 2016/9/14.
  */
-public interface ISocket<T> {
-    void start();
+public interface ISocket {
+    void connected() throws IOException;
 
-    void stop();
+    void dispose();
 
-    void send(final byte[] buffer, final int offset, final int length);
+    IHandler getHandler();
 
-    void send(final byte[] buffer);
-
-    void send(final String str);
+    void setHandler(IHandler handler);
 
     boolean isRunning();
-
-    interface ReceiveListener<T> {
-        void onReceive(T buffer);
-    }
-
-    void addReceiveListener(ReceiveListener<T> receiveListener);
-
-    interface StateListener {
-        void onStarted();
-
-        void onStoped();
-    }
-
-    void addStateListener(StateListener socketListener);
-
-    interface ErrorListener {
-        void onError(Error error, Exception exception);
-    }
-
-    void addErrorListener(ErrorListener errorListener);
-
-    interface SocketListener<T> extends ReceiveListener<T>, StateListener, ErrorListener {
-
-    }
-
-    void addSocketListener(SocketListener<T> socketListener);
 }

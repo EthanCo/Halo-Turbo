@@ -1,10 +1,12 @@
 package com.ethanco.halo.turbo;
 
+import com.ethanco.halo.turbo.ads.IHandler;
 import com.ethanco.halo.turbo.ads.ISocket;
 import com.ethanco.halo.turbo.ads.absHalo;
 import com.ethanco.halo.turbo.bean.Config;
 import com.ethanco.halo.turbo.type.Mode;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,29 +25,25 @@ public class Halo extends absHalo {
         this.haloImpl = SocketFactory.create(builder);
     }
 
+
     @Override
-    public void start() {
-        haloImpl.start();
+    public void connected() throws IOException {
+        this.haloImpl.connected();
     }
 
     @Override
-    public void stop() {
-        haloImpl.stop();
+    public void dispose() {
+        haloImpl.dispose();
     }
 
     @Override
-    public void send(byte[] buffer, int offset, int length) {
-        haloImpl.send(buffer, offset, length);
+    public IHandler getHandler() {
+        return this.haloImpl.getHandler();
     }
 
     @Override
-    public void send(byte[] buffer) {
-        haloImpl.send(buffer);
-    }
-
-    @Override
-    public void send(String str) {
-        haloImpl.send(str);
+    public void setHandler(IHandler handler) {
+        this.haloImpl.setHandler(handler);
     }
 
     @Override
@@ -53,56 +51,42 @@ public class Halo extends absHalo {
         return haloImpl.isRunning();
     }
 
-    @Override
-    public void addReceiveListener(ReceiveListener receiveListener) {
-        haloImpl.addReceiveListener(receiveListener);
-    }
-
-    @Override
-    public void addStateListener(StateListener socketListener) {
-        haloImpl.addStateListener(socketListener);
-    }
-
-    @Override
-    public void addErrorListener(ErrorListener errorListener) {
-        haloImpl.addErrorListener(errorListener);
-    }
-
-    @Override
-    public void addSocketListener(SocketListener socketListener) {
-        haloImpl.addSocketListener(socketListener);
-    }
-
     public static class Builder extends Config {
 
         private ISocket ihalo;
 
         public Builder() {
-            //this.type = Type.TCP;
             this.mode = Mode.TCP_CLIENT;
-            this.ip = "192.168.1.1";
-            this.port = 8800;
+            this.targetIP = "192.168.1.1";
+            this.targetPort = 19600;
+            //this.sourceIP = "192.168.1.1";
+            this.sourcePort = 19700;
             this.bufferSize = 1024;
             this.threadPool = Executors.newCachedThreadPool();
         }
-
-        /*public Builder setType(Type type) {
-            //this.type = type;
-            return this;
-        }*/
 
         public Builder setMode(Mode mode) {
             this.mode = mode;
             return this;
         }
 
-        public Builder setIp(String ip) {
-            this.ip = ip;
+        public Builder setTargetIP(String targetIP) {
+            this.targetIP = targetIP;
             return this;
         }
 
-        public Builder setPort(int port) {
-            this.port = port;
+        public Builder setTargetPort(int targetPort) {
+            this.targetPort = targetPort;
+            return this;
+        }
+
+        /*public Builder setSourceIP(String sourceIP) {
+            this.sourceIP = sourceIP;
+            return this;
+        }*/
+
+        public Builder setSourcePort(int sourcePort) {
+            this.sourcePort = sourcePort;
             return this;
         }
 
@@ -118,6 +102,11 @@ public class Halo extends absHalo {
 
         public Builder setThreadPool(ExecutorService threadPool) {
             this.threadPool = threadPool;
+            return this;
+        }
+
+        public Builder setHandler(IHandler handler) {
+            this.handler = handler;
             return this;
         }
 

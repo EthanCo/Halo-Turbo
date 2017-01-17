@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Material 色彩规范-->
+    <!--App主色调-->
     <color name="colorPrimary">#3F51B5</color>
+    <!--App主色调 (暗色)-->
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--App主色调 (亮色)-->
+    <color name="colorPrimaryLight">#1976D2</color>
+    <!--App着重色-->
+    <color name="colorAccent">#DD0050</color>
+    <!--App着重色 (暗色)-->
+    <color name="colorAccentDark">#C60037</color>
+    <!--主文字-->
+    <color name="colorPrimaryText">#212121</color>
+    <!--次级文字-->
+    <color name="colorSecondaryText">#757575</color>
+    <!--hint文字-->
+    <color name="colorHintText">#d5d5d5</color>
+    <!--周边颜色为Primary时 Text和Icons的颜色-->
+    <color name="colorIcons">#FFFFFF</color>
+    <!--分割线-->
+    <color name="colorDivider">#BDBDBD</color>
+
+    <!--白色-->
+    <color name="colorWhite">#FFFFFF</color>
+    <!--黑色-->
+    <color name="colorBlack">#000000</color>
+    <!--淡白色-->
+    <color name="colorWhiteSmoke">#F5F5F5</color>
+    <!--透明-->
+    <color name="colorTrans">#00000000</color>
 </resources>

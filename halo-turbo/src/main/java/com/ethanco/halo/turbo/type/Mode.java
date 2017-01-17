@@ -6,6 +6,5 @@ package com.ethanco.halo.turbo.type;
 public enum Mode {
     TCP_CLIENT,
     TCP_SERVICE,
-    UDP_CLIENT,
-    UDP_SERVICE
+    MULTICAST,
 }

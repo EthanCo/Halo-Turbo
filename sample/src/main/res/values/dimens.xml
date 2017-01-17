@@ -2,4 +2,46 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="actionbar_height">40dip</dimen>
+
+    <!--超大号字体-->
+    <dimen name="textSize_large_V32">32sp</dimen>
+    <dimen name="textSize_large_V45">45sp</dimen>
+    <dimen name="textSize_large_V56">56sp</dimen>
+    <dimen name="textSize_large_V112">112sp</dimen>
+
+    <!--大标题-->
+    <dimen name="textSize_mainHead_V24">24sp</dimen>
+    <dimen name="textSize_mainHead_V22">22sp</dimen>
+
+    <!--appbar文字-->
+    <dimen name="textSize_appBar_V20">20sp</dimen>
+
+    <!--小标题-->
+    <dimen name="textSize_subHead_V18">18sp</dimen>
+    <dimen name="textSize_subHead_V16">16sp</dimen>
+
+    <!--正文/按钮文字-->
+    <dimen name="textSize_body_V14">14sp</dimen>
+
+    <!--小号提示-->
+    <dimen name="textSize_tip_V12">12sp</dimen>
+
+
+    <!--悬浮按钮-->
+    <dimen name="fab_margin">16dp</dimen>
+    <!--底部导航栏-->
+    <dimen name="BottomNavigationBar_height">48dp</dimen>
+    <!--卡片-->
+    <dimen name="cardview_margin">8dp</dimen>
+    <!--分隔线上下留白-->
+    <dimen name="divider_vertical_margin">8dp</dimen>
+    <!--大多元素的留白距离-->
+    <dimen name="common_margin">16dp</dimen>
+    <!--用户头像尺寸-->
+    <dimen name="userHead_size">64dp</dimen>
+    <dimen name="userHead_size_small">48dp</dimen>
+    <!--小图标点击区域: 小于该尺寸的图标都应有该范围的点击区域-->
+    <dimen name="small_icon_click_scope">48dp</dimen>
+    <dimen name="btn_radius">5dp</dimen>
 </resources>
