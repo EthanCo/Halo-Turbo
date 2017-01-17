@@ -56,7 +56,7 @@ public class Halo extends AbstractHalo {
         private ISocket ihalo;
 
         public Builder() {
-            this.mode = Mode.TCP_CLIENT;
+            this.mode = Mode.NIO_TCP_CLIENT;
             this.targetIP = "192.168.1.1";
             this.targetPort = 19600;
             //this.sourceIP = "192.168.1.1";

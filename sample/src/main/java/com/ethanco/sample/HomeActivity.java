@@ -38,6 +38,20 @@ public class HomeActivity extends AppCompatActivity {
                 actionStartAty(MulticastClientActivity.class);
             }
         });
+
+        binding.tvMinaTcpClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actionStartAty(MinaTcpClientActivity.class);
+            }
+        });
+
+        binding.tvMinaTcpServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actionStartAty(MinaTcpServerActivity.class);
+            }
+        });
     }
 
     private void actionStartAty(Class<? extends Activity> cls) {

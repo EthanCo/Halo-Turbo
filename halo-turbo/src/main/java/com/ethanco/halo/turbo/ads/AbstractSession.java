@@ -1,7 +1,7 @@
 package com.ethanco.halo.turbo.ads;
 
 /**
- * TODO
+ * 回话 抽象类
  *
  * @author EthanCo
  * @since 2017/1/17

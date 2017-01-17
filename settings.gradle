@@ -1,1 +1,1 @@
-include ':sample', ':halo-turbo'
+include ':sample', ':halo-turbo', ':halo-turbo-mina'

@@ -5,24 +5,51 @@ import com.ethanco.halo.turbo.bean.Config;
 import com.ethanco.halo.turbo.impl.MulticastSocket;
 import com.ethanco.halo.turbo.type.Mode;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Created by EthanCo on 2016/9/19.
  */
 public class SocketFactory {
 
     public static ISocket create(Config config) {
-        ISocket haloImpl = null;
+        ISocket haloImpl;
         Mode mode = config.mode;
-//        if (mode == Mode.TCP_CLIENT) {
-//            haloImpl = new TcpClientSocket(config);
-//        } else if (mode == Mode.TCP_SERVICE) {
-//            haloImpl = new TcpServerSocket(config);
-//        } else {
-//            haloImpl = new LogHaloImpl(config); //TODO test
-//        }
 
         if (mode == Mode.MULTICAST) {
             haloImpl = new MulticastSocket(config);
+        } else{
+            haloImpl = createByReflect(mode, config);
+        }
+        return haloImpl;
+    }
+
+    private static ISocket createByReflect(Mode mode, Config config) {
+        String className;
+        if (mode == Mode.NIO_TCP_CLIENT) {
+            className = "com.ethanco.halo.turbo.mina.MinaClientSocket";
+        } else if (mode == Mode.NIO_TCP_SERVER) {
+            className = "com.ethanco.halo.turbo.mina.MinaServerSocket";
+        } else {
+            return null;
+        }
+
+        ISocket haloImpl = null;
+        try {
+            Class cls = Class.forName(className);
+            Constructor constructor = cls.getConstructor(Config.class);
+            haloImpl = (ISocket) constructor.newInstance(config);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
         return haloImpl;
     }
