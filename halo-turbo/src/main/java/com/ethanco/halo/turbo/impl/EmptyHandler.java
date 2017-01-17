@@ -12,27 +12,27 @@ import com.ethanco.halo.turbo.ads.ISession;
 
 public class EmptyHandler implements IHandler {
     @Override
-    public void sessionCreated(ISession var1) {
+    public void sessionCreated(ISession session) {
 
     }
 
     @Override
-    public void sessionOpened(ISession var1) {
+    public void sessionOpened(ISession session) {
 
     }
 
     @Override
-    public void sessionClosed(ISession var1) {
+    public void sessionClosed(ISession session) {
 
     }
 
     @Override
-    public void messageReceived(ISession var1, Object var2) {
+    public void messageReceived(ISession session, Object message) {
 
     }
 
     @Override
-    public void messageSent(ISession var1, Object var2) {
+    public void messageSent(ISession session, Object message) {
 
     }
 }

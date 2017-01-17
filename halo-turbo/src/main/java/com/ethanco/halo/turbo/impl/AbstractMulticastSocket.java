@@ -1,14 +1,18 @@
 package com.ethanco.halo.turbo.impl;
 
+import android.os.Handler;
+
 import com.ethanco.halo.turbo.ads.IHandler;
 import com.ethanco.halo.turbo.ads.ISession;
 import com.ethanco.halo.turbo.ads.ISocket;
 import com.ethanco.halo.turbo.bean.Config;
+import com.ethanco.halo.turbo.utils.UIHandler;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author EthanCo
@@ -22,9 +26,13 @@ public abstract class AbstractMulticastSocket implements ISocket {
     protected MulticastSocket socket = null;
     protected ISession session = null;
     protected IHandler handler = null;
+    protected ExecutorService threadPool;
+    protected Handler uiHandler;
 
     public AbstractMulticastSocket(Config config) {
         this.config = config;
+        this.threadPool = config.threadPool;
+        this.uiHandler = UIHandler.getHandler();
         getHandler();
     }
 
@@ -35,11 +43,15 @@ public abstract class AbstractMulticastSocket implements ISocket {
         socket.joinGroup(address);
         handler.sessionOpened(session);
 
-        config.threadPool.execute(new Runnable() {
+        threadPool.execute(new Runnable() {
             @Override
             public void run() {
                 while (isRunning()) {
-                    receive();
+                    try {
+                        receive();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -62,7 +74,12 @@ public abstract class AbstractMulticastSocket implements ISocket {
         } finally {
             socket.close();
             socket = null;
-            handler.sessionClosed(session);
+            uiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    handler.sessionClosed(session);
+                }
+            });
         }
     }
 
@@ -84,26 +101,28 @@ public abstract class AbstractMulticastSocket implements ISocket {
         return socket != null;
     }
 
-    protected void sent(Object message, byte[] buf) {
-        DatagramPacket packet;
+    protected void sent(final Object message, final byte[] buf) throws IOException {
+        final DatagramPacket packet;
         packet = new DatagramPacket(buf, buf.length, address, config.targetPort);
-        try {
-            socket.send(packet);
-            handler.messageSent(session, message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        socket.send(packet);
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                handler.messageSent(session, packet.getData());
+            }
+        });
     }
 
-    protected void receive() {
-        DatagramPacket packet;
+    protected void receive() throws IOException {
+        final DatagramPacket packet;
         byte[] rev = new byte[config.bufferSize];
         packet = new DatagramPacket(rev, rev.length);
-        try {
-            socket.receive(packet);
-            handler.messageReceived(session, packet.getData());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        socket.receive(packet);
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                handler.messageReceived(session, packet.getData());
+            }
+        });
     }
 }

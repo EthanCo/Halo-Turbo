@@ -2,7 +2,7 @@ package com.ethanco.halo.turbo;
 
 import com.ethanco.halo.turbo.ads.IHandler;
 import com.ethanco.halo.turbo.ads.ISocket;
-import com.ethanco.halo.turbo.ads.absHalo;
+import com.ethanco.halo.turbo.ads.AbstractHalo;
 import com.ethanco.halo.turbo.bean.Config;
 import com.ethanco.halo.turbo.type.Mode;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by EthanCo on 2016/9/14.
  */
-public class Halo extends absHalo {
+public class Halo extends AbstractHalo {
 
     private ISocket haloImpl;
 
