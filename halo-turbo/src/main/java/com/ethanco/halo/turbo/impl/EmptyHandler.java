@@ -1,7 +1,6 @@
 package com.ethanco.halo.turbo.impl;
 
-import com.ethanco.halo.turbo.ads.IHandler;
-import com.ethanco.halo.turbo.ads.ISession;
+import com.ethanco.halo.turbo.ads.IHandlerAdapter;
 
 /**
  * 空的Handler
@@ -10,29 +9,6 @@ import com.ethanco.halo.turbo.ads.ISession;
  * @since 2017/1/17
  */
 
-public class EmptyHandler implements IHandler {
-    @Override
-    public void sessionCreated(ISession session) {
+public class EmptyHandler extends IHandlerAdapter {
 
-    }
-
-    @Override
-    public void sessionOpened(ISession session) {
-
-    }
-
-    @Override
-    public void sessionClosed(ISession session) {
-
-    }
-
-    @Override
-    public void messageReceived(ISession session, Object message) {
-
-    }
-
-    @Override
-    public void messageSent(ISession session, Object message) {
-
-    }
 }

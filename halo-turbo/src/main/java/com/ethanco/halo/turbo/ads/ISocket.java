@@ -1,18 +1,20 @@
 package com.ethanco.halo.turbo.ads;
 
-import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by EthanCo on 2016/9/14.
  */
 public interface ISocket {
-    void connected() throws IOException;
+    boolean start();
 
-    void dispose();
+    void stop();
 
-    IHandler getHandler();
+    List<IHandler> getHandlers();
 
-    void setHandler(IHandler handler);
+    void addHandler(IHandler handler);
+
+    boolean removeHandler(IHandler handler);
 
     boolean isRunning();
 }

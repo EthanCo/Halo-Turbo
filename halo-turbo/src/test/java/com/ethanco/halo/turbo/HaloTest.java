@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.robolectric.annotation.Config;
 
+import java.io.IOException;
+
 /**
  * Created by EthanCo on 2016/9/14.
  */
@@ -19,7 +21,7 @@ public class HaloTest {
         Halo.Builder builder = new Halo.Builder()
                 .setTargetIP("192.168.2.1")
                 .setTargetPort(8890)
-                .setMode(Mode.NIO_TCP_CLIENT)
+                .setMode(Mode.MINA_NIO_TCP_CLIENT)
                 //.setType(Type.UDP)
                 .setBufferSize(1024 * 2);
 
@@ -28,8 +30,12 @@ public class HaloTest {
 
     @Test
     public void testLogic() {
-        halo.connected();
-        halo.send("hello");
-        halo.dispose();
+        try {
+            halo.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //halo.send("hello");
+        halo.stop();
     }
 }

@@ -1,20 +1,21 @@
 package com.ethanco.halo.turbo;
 
+import com.ethanco.halo.turbo.ads.AbstractHalo;
 import com.ethanco.halo.turbo.ads.IHandler;
 import com.ethanco.halo.turbo.ads.ISocket;
-import com.ethanco.halo.turbo.ads.AbstractHalo;
 import com.ethanco.halo.turbo.bean.Config;
 import com.ethanco.halo.turbo.type.Mode;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by EthanCo on 2016/9/14.
  */
 public class Halo extends AbstractHalo {
 
+    public static String HALO = "halo";
     private ISocket haloImpl;
 
     public Halo() {
@@ -27,23 +28,28 @@ public class Halo extends AbstractHalo {
 
 
     @Override
-    public void connected() throws IOException {
-        this.haloImpl.connected();
+    public boolean start() {
+        return this.haloImpl.start();
     }
 
     @Override
-    public void dispose() {
-        haloImpl.dispose();
+    public void stop() {
+        haloImpl.stop();
     }
 
     @Override
-    public IHandler getHandler() {
-        return this.haloImpl.getHandler();
+    public List<IHandler> getHandlers() {
+        return this.haloImpl.getHandlers();
     }
 
     @Override
-    public void setHandler(IHandler handler) {
-        this.haloImpl.setHandler(handler);
+    public void addHandler(IHandler handler) {
+        this.haloImpl.addHandler(handler);
+    }
+
+    @Override
+    public boolean removeHandler(IHandler handler) {
+        return this.haloImpl.removeHandler(handler);
     }
 
     @Override
@@ -56,13 +62,15 @@ public class Halo extends AbstractHalo {
         private ISocket ihalo;
 
         public Builder() {
-            this.mode = Mode.NIO_TCP_CLIENT;
+            this.mode = Mode.MINA_NIO_TCP_CLIENT;
             this.targetIP = "192.168.1.1";
             this.targetPort = 19600;
             //this.sourceIP = "192.168.1.1";
             this.sourcePort = 19700;
             this.bufferSize = 1024;
-            this.threadPool = Executors.newCachedThreadPool();
+            this.handlers = new ArrayList<>();
+            //需要的自行进行初始化
+            //this.threadPool = Executors.newCachedThreadPool();
         }
 
         public Builder setMode(Mode mode) {
@@ -105,8 +113,10 @@ public class Halo extends AbstractHalo {
             return this;
         }
 
-        public Builder setHandler(IHandler handler) {
-            this.handler = handler;
+        public Builder addHandler(IHandler handler) {
+            if (!this.handlers.contains(handler)) {
+                this.handlers.add(handler);
+            }
             return this;
         }
 

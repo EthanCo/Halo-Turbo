@@ -3,6 +3,7 @@ package com.ethanco.halo.turbo.bean;
 import com.ethanco.halo.turbo.ads.IHandler;
 import com.ethanco.halo.turbo.type.Mode;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -24,5 +25,5 @@ public class Config {
     //线程池
     public ExecutorService threadPool;
 
-    public IHandler handler;
+    public List<IHandler> handlers;
 }

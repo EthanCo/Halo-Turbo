@@ -27,9 +27,9 @@ public class SocketFactory {
 
     private static ISocket createByReflect(Mode mode, Config config) {
         String className;
-        if (mode == Mode.NIO_TCP_CLIENT) {
+        if (mode == Mode.MINA_NIO_TCP_CLIENT) {
             className = "com.ethanco.halo.turbo.mina.MinaClientSocket";
-        } else if (mode == Mode.NIO_TCP_SERVER) {
+        } else if (mode == Mode.MINA_NIO_TCP_SERVER) {
             className = "com.ethanco.halo.turbo.mina.MinaServerSocket";
         } else {
             return null;

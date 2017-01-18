@@ -1,18 +1,14 @@
 package com.ethanco.halo.turbo.impl;
 
-import android.os.Handler;
-
 import com.ethanco.halo.turbo.ads.AbstractSession;
 import com.ethanco.halo.turbo.ads.AbstractSocket;
-import com.ethanco.halo.turbo.ads.IHandler;
-import com.ethanco.halo.turbo.ads.ISession;
 import com.ethanco.halo.turbo.bean.Config;
-import com.ethanco.halo.turbo.utils.UIHandler;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author EthanCo
@@ -21,39 +17,42 @@ import java.util.concurrent.ExecutorService;
 
 public class MulticastSocket extends AbstractSocket {
 
-    protected final Config config;
     protected InetAddress address = null;
     protected java.net.MulticastSocket socket = null;
-    protected ISession session = null;
-    protected IHandler handler = null;
     protected ExecutorService threadPool;
-    protected Handler uiHandler;
 
     public MulticastSocket(Config config) {
         super(config);
-        if (config.handler != null) {
-            this.handler = config.handler;
-        }
-        getHandler();
-        this.session = new DefaultSession();
-        this.config = config;
-        this.threadPool = config.threadPool;
-        this.uiHandler = UIHandler.getHandler();
 
-        uiHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                handler.sessionCreated(session);
-            }
-        });
+        assignThreadPool(config);
+        initSession();
+    }
+
+    private void initSession() {
+        session = new DefaultSession();
+        sessionCreated(session);
+    }
+
+    private void assignThreadPool(Config config) {
+        if (config.threadPool == null) {
+            this.threadPool = Executors.newCachedThreadPool();
+        } else {
+            this.threadPool = config.threadPool;
+        }
     }
 
     @Override
-    public void connected() throws IOException {
-        socket = new java.net.MulticastSocket(config.sourcePort);
-        address = InetAddress.getByName(config.targetIP);
-        socket.joinGroup(address);
-        handler.sessionOpened(session);
+    public boolean start() {
+        super.start();
+        try {
+            socket = new java.net.MulticastSocket(config.sourcePort);
+            address = InetAddress.getByName(config.targetIP);
+            socket.joinGroup(address);
+            sessionOpened(session);
+        } catch (IOException e) {
+            onStartFailed(e);
+            return false;
+        }
 
         threadPool.execute(new Runnable() {
             @Override
@@ -62,15 +61,19 @@ public class MulticastSocket extends AbstractSocket {
                     try {
                         receive();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        onReceiveException(e);
                     }
                 }
             }
         });
+
+        onStartSuccess();
+        return true;
     }
 
     @Override
-    public void dispose() {
+    public void stop() {
+        super.stop();
         if (socket == null) {
             return;
         }
@@ -86,12 +89,8 @@ public class MulticastSocket extends AbstractSocket {
         } finally {
             socket.close();
             socket = null;
-            uiHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    handler.sessionClosed(session);
-                }
-            });
+            sessionClosed(session);
+            onStopped();
         }
     }
 
@@ -100,16 +99,11 @@ public class MulticastSocket extends AbstractSocket {
         return socket != null;
     }
 
-    protected void sent(final Object message, final byte[] buf) throws IOException {
+    protected void sent(final byte[] buf) throws IOException {
         final DatagramPacket packet;
         packet = new DatagramPacket(buf, buf.length, address, config.targetPort);
         socket.send(packet);
-        uiHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                handler.messageSent(session, packet.getData());
-            }
-        });
+        messageSent(session, packet.getData());
     }
 
     protected void receive() throws IOException {
@@ -117,12 +111,7 @@ public class MulticastSocket extends AbstractSocket {
         byte[] rev = new byte[config.bufferSize];
         packet = new DatagramPacket(rev, rev.length);
         socket.receive(packet);
-        uiHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                handler.messageReceived(session, packet.getData());
-            }
-        });
+        messageReceived(session, packet.getData());
     }
 
     private class DefaultSession extends AbstractSession {
@@ -136,7 +125,7 @@ public class MulticastSocket extends AbstractSocket {
                     if (buf == null) return;
 
                     try {
-                        sent(message, buf);
+                        sent(buf);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
