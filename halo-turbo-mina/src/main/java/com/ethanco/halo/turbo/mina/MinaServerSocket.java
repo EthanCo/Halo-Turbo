@@ -27,10 +27,14 @@ import static com.ethanco.halo.turbo.mina.MinaUtil.convertToISession;
 
 public class MinaServerSocket extends AbstractSocket {
     private NioSocketAcceptor acceptor;
+    private InetSocketAddress address;
 
     public MinaServerSocket(Config config) {
         super(config);
+    }
 
+    private void init(Config config) {
+        address = new InetSocketAddress(config.sourcePort);
         acceptor = new NioSocketAcceptor();
         acceptor.getFilterChain().addLast(LOGGER, new LoggingFilter());
         acceptor.getFilterChain().addLast(CODEC,
@@ -38,13 +42,15 @@ public class MinaServerSocket extends AbstractSocket {
         acceptor.setHandler(new MinaServerHandler());
         acceptor.getSessionConfig().setReadBufferSize(config.bufferSize);
         acceptor.getSessionConfig().setIdleTime(IdleStatus.WRITER_IDLE, 10);
+        acceptor.setReuseAddress(true); //避免重启时提示地址被占用
     }
 
     @Override
     public boolean start() {
         super.start();
+        init(config);
         try {
-            acceptor.bind(new InetSocketAddress(config.sourcePort));
+            acceptor.bind(address);
         } catch (IOException e) {
             onStartFailed(e);
             return false;
@@ -64,8 +70,10 @@ public class MinaServerSocket extends AbstractSocket {
             return;
         }
 
+        acceptor.unbind(address);
         acceptor.dispose();
         acceptor = null;
+        address = null;
 
         onStopped();
     }

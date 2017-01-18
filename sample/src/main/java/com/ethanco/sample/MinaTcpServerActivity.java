@@ -49,6 +49,16 @@ public class MinaTcpServerActivity extends AppCompatActivity {
                 }.start();
             }
         });
+
+        binding.btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (halo != null) {
+                    halo.stop();
+                    binding.tvInfo.append("停止启动" + "\r\n");
+                }
+            }
+        });
     }
 
     @Override

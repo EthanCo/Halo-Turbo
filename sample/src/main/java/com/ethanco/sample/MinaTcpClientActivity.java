@@ -19,6 +19,7 @@ public class MinaTcpClientActivity extends AppCompatActivity {
     private static final String TAG = "Z-MinaTcpClientActivity";
     private ActivityMinaTcpClientBinding binding;
     private ISession session;
+    private Halo halo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +37,16 @@ public class MinaTcpClientActivity extends AppCompatActivity {
                 new Thread() {
                     @Override
                     public void run() {
-                        Halo halo = new Halo.Builder()
-                                .setMode(Mode.MINA_NIO_TCP_CLIENT)
-                                .setBufferSize(2048)
-                                .setTargetIP(targetIP)
-                                .setTargetPort(19701)
-                                .addHandler(new LogHandler(TAG))
-                                .addHandler(new DemoHandler())
-                                .build();
+                        if (halo == null) {
+                            halo = new Halo.Builder()
+                                    .setMode(Mode.MINA_NIO_TCP_CLIENT)
+                                    .setBufferSize(2048)
+                                    .setTargetIP(targetIP)
+                                    .setTargetPort(19701)
+                                    .addHandler(new LogHandler(TAG))
+                                    .addHandler(new DemoHandler())
+                                    .build();
+                        }
 
                         final boolean startSuccess = halo.start();
                         runOnUiThread(new Runnable() {
@@ -65,6 +68,16 @@ public class MinaTcpClientActivity extends AppCompatActivity {
                     Toast.makeText(MinaTcpClientActivity.this, "未建立连接", Toast.LENGTH_SHORT).show();
                 } else {
                     session.write("hello，这是从Client发送的数据");
+                }
+            }
+        });
+
+        binding.btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (halo != null) {
+                    halo.stop();
+                    binding.tvInfo.append("停止连接" + "\r\n");
                 }
             }
         });
@@ -93,6 +106,12 @@ public class MinaTcpClientActivity extends AppCompatActivity {
                 String sendData = String.valueOf(message);
                 binding.tvInfo.append("发送:" + sendData + "\r\n");
             }
+        }
+
+        @Override
+        public void sessionClosed(ISession session) {
+            super.sessionClosed(session);
+            MinaTcpClientActivity.this.session = null;
         }
     }
 }

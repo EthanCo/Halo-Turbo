@@ -26,28 +26,31 @@ import static com.ethanco.halo.turbo.mina.MinaUtil.convertToISession;
  */
 
 public class MinaClientSocket extends AbstractSocket {
-    private final InetSocketAddress address;
-    private NioSocketConnector mConnection;
+    private InetSocketAddress address;
+    private NioSocketConnector connector;
     private IoSession mSession;
 
     public MinaClientSocket(Config config) {
         super(config);
+    }
 
+    private void init(Config config) {
         address = new InetSocketAddress(config.targetIP, config.targetPort);
-        mConnection = new NioSocketConnector();
-        mConnection.setDefaultRemoteAddress(address);
-        mConnection.getFilterChain().addLast(LOGGER, new LoggingFilter());
-        mConnection.getFilterChain().addLast(CODEC, new ProtocolCodecFilter(
+        connector = new NioSocketConnector();
+        connector.setDefaultRemoteAddress(address);
+        connector.getFilterChain().addLast(LOGGER, new LoggingFilter());
+        connector.getFilterChain().addLast(CODEC, new ProtocolCodecFilter(
                 new ObjectSerializationCodecFactory()));
-        mConnection.setHandler(new MinaClientHandler());
-        mConnection.getSessionConfig().setReadBufferSize(config.bufferSize);
-        mConnection.getSessionConfig().setIdleTime(IdleStatus.WRITER_IDLE, 10);
+        connector.setHandler(new MinaClientHandler());
+        connector.getSessionConfig().setReadBufferSize(config.bufferSize);
+        connector.getSessionConfig().setIdleTime(IdleStatus.WRITER_IDLE, 10);
     }
 
     @Override
     public boolean start() {
         super.start();
-        ConnectFuture future = mConnection.connect();
+        init(config);
+        ConnectFuture future = connector.connect();
         future.awaitUninterruptibly();
         try {
             mSession = future.getSession();
@@ -64,26 +67,26 @@ public class MinaClientSocket extends AbstractSocket {
     @Override
     public void stop() {
         super.stop();
-        if (mConnection == null) {
+        if (connector == null) {
             return;
         }
-        if (mConnection.isDisposed() || mConnection.isDisposing()) {
+        if (connector.isDisposed() || connector.isDisposing()) {
             return;
         }
 
-        mConnection.dispose();
-        mConnection = null;
+        connector.dispose();
+        connector = null;
         mSession = null;
-        //mAddress = null;
+        address = null;
         onStopped();
     }
 
     @Override
     public boolean isRunning() {
-        if (mConnection == null) {
+        if (connector == null) {
             return false;
         }
-        return mConnection.isActive();
+        return connector.isActive();
     }
 
     private class MinaClientHandler extends IoHandlerAdapter {
