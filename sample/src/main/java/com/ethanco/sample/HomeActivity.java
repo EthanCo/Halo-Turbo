@@ -18,13 +18,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
 
-        binding.tvTcp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                actionStartAty(TCPActivity.class);
-            }
-        });
-
         binding.tvMulServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

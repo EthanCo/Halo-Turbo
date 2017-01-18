@@ -10,13 +10,6 @@
         tools:context="com.ethanco.sample.HomeActivity">
 
         <TextView
-            android:id="@+id/tv_tcp"
-            style="@style/HomeItemText"
-            android:text="TCP ACTIVITY" />
-
-        <include layout="@layout/include_divider" />
-
-        <TextView
             android:id="@+id/tv_mul_client"
             style="@style/HomeItemText"
             android:text="MUL CLIENT ACTIVITY" />

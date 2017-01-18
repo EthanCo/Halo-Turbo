@@ -37,7 +37,14 @@ public class MinaTcpServerActivity extends AppCompatActivity {
                 new Thread() {
                     @Override
                     public void run() {
-                        halo.start();
+                        final boolean startSuccess = halo.start();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String startResult = startSuccess ? "启动成功" : "启动失败";
+                                binding.tvInfo.append(startResult + "\r\n");
+                            }
+                        });
                     }
                 }.start();
             }
@@ -55,7 +62,21 @@ public class MinaTcpServerActivity extends AppCompatActivity {
     class DemoHandler extends IHandlerAdapter {
         @Override
         public void messageReceived(ISession session, Object message) {
-            session.write("---==>666哈哈 00-00");
+            session.write("这是服务端，我已经收到数据了 --->>>666");
+            if (message instanceof String) {
+                String receive = String.valueOf(message);
+                binding.tvInfo.append("接收:" + receive + "\r\n");
+            }
+        }
+
+        @Override
+        public void messageSent(ISession session, Object message) {
+            super.messageSent(session, message);
+
+            if (message instanceof String) {
+                String sendData = String.valueOf(message);
+                binding.tvInfo.append("发送:" + sendData + "\r\n");
+            }
         }
     }
 }
