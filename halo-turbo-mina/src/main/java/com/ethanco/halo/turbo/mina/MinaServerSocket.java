@@ -48,6 +48,10 @@ public class MinaServerSocket extends AbstractSocket {
     @Override
     public boolean start() {
         super.start();
+        if (isRunning()) {
+            return false;
+        }
+
         init(config);
         try {
             acceptor.bind(address);

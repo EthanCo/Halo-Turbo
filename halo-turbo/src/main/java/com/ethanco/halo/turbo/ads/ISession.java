@@ -6,4 +6,6 @@ package com.ethanco.halo.turbo.ads;
  */
 public interface ISession {
     void write(Object message);
+
+    void close();
 }

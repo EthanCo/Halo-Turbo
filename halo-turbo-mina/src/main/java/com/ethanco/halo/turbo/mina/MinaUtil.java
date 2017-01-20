@@ -21,6 +21,12 @@ public class MinaUtil {
             public void write(Object message) {
                 ioSession.write(message);
             }
+
+            @Override
+            public void close() {
+                ioSession.closeOnFlush();
+                //ioSession.closeNow();
+            }
         };
     }
 }

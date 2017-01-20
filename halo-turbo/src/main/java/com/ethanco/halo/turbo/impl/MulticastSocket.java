@@ -44,6 +44,10 @@ public class MulticastSocket extends AbstractSocket {
     @Override
     public boolean start() {
         super.start();
+        if (isRunning()) {
+            return false;
+        }
+
         try {
             socket = new java.net.MulticastSocket(config.sourcePort);
             address = InetAddress.getByName(config.targetIP);
@@ -131,6 +135,11 @@ public class MulticastSocket extends AbstractSocket {
                     }
                 }
             });
+        }
+
+        @Override
+        public void close() {
+            stop();
         }
 
         private byte[] convertToBuffer(Object message) {

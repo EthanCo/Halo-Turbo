@@ -49,6 +49,10 @@ public class MinaClientSocket extends AbstractSocket {
     @Override
     public boolean start() {
         super.start();
+        if (isRunning()) {
+            return false;
+        }
+
         init(config);
         ConnectFuture future = connector.connect();
         future.awaitUninterruptibly();

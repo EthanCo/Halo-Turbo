@@ -2,10 +2,10 @@ package com.ethanco.halo.turbo.impl;
 
 import android.util.Log;
 
-import com.ethanco.halo.turbo.Halo;
 import com.ethanco.halo.turbo.ads.AbstractLog;
 import com.ethanco.halo.turbo.ads.ISession;
 import com.ethanco.halo.turbo.utils.HexUtil;
+import com.ethanco.halo.turbo.utils.Util;
 
 /**
  * 默认日志处理
@@ -15,7 +15,7 @@ import com.ethanco.halo.turbo.utils.HexUtil;
  */
 
 public class LogHandler extends AbstractLog {
-    private String tag = Halo.HALO;
+    private String tag = Util.HALO;
 
     public LogHandler() {
     }

@@ -48,6 +48,16 @@ public class MinaTcpClientActivity extends AppCompatActivity {
                                     .build();
                         }
 
+                        if (halo.isRunning()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplication(), "已启动", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            return;
+                        }
+
                         final boolean startSuccess = halo.start();
                         runOnUiThread(new Runnable() {
                             @Override

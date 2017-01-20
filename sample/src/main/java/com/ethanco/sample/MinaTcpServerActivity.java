@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ethanco.halo.turbo.Halo;
 import com.ethanco.halo.turbo.ads.IHandlerAdapter;
@@ -37,6 +38,16 @@ public class MinaTcpServerActivity extends AppCompatActivity {
                 new Thread() {
                     @Override
                     public void run() {
+                        if (halo.isRunning()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplication(), "已启动", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            return;
+                        }
+
                         final boolean startSuccess = halo.start();
                         runOnUiThread(new Runnable() {
                             @Override

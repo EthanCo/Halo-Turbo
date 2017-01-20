@@ -28,4 +28,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.1.1'
     compile project(':halo-turbo')
     compile project(':halo-turbo-mina')
+
+//    compile 'com.github.EthanCo.Halo-Turbo:halo-turbo:Halo-Turbo-2.0.0'
+//    compile 'com.github.EthanCo.Halo-Turbo:halo-turbo-mina:Halo-Turbo-2.0.0'
 }

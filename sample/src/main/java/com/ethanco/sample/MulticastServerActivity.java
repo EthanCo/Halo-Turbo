@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ethanco.halo.turbo.Halo;
 import com.ethanco.halo.turbo.ads.IHandlerAdapter;
@@ -25,21 +26,43 @@ public class MulticastServerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_multicast_server);
 
+        halo = new Halo.Builder()
+                .setMode(Mode.MULTICAST)
+                .setSourcePort(19602)
+                .setTargetPort(19601)
+                .setTargetIP("224.0.0.1")
+                .setBufferSize(512)
+                .addHandler(new LogHandler(TAG))
+                .addHandler(new DemoHandler())
+                .setThreadPool(Executors.newCachedThreadPool())
+                .build();
+
         binding.btnStartService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                halo = new Halo.Builder()
-                        .setMode(Mode.MULTICAST)
-                        .setSourcePort(19602)
-                        .setTargetPort(19601)
-                        .setTargetIP("224.0.0.1")
-                        .setBufferSize(512)
-                        .addHandler(new LogHandler(TAG))
-                        .addHandler(new DemoHandler())
-                        .setThreadPool(Executors.newCachedThreadPool())
-                        .build();
+                if (halo.isRunning()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MulticastServerActivity.this, "已启动", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    return;
+                }
 
-                halo.start();
+                boolean result = halo.start();
+                String startSuccess = result ? "启动成功" : "启动失败";
+                binding.tvInfo.append(startSuccess + "\r\n");
+            }
+        });
+
+        binding.btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (halo != null) {
+                    halo.stop();
+                    binding.tvInfo.append("停止启动" + "\r\n");
+                }
             }
         });
     }

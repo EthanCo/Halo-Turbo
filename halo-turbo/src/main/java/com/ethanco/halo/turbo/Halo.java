@@ -14,15 +14,13 @@ import java.util.concurrent.ExecutorService;
  * Created by EthanCo on 2016/9/14.
  */
 public class Halo extends AbstractHalo {
-
-    public static String HALO = "halo";
     private ISocket haloImpl;
 
     public Halo() {
         this(new Builder());
     }
 
-    private Halo(Builder builder) {
+    public Halo(Builder builder) {
         this.haloImpl = SocketFactory.create(builder);
     }
 

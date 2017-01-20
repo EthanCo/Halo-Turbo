@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ethanco.halo.turbo.Halo;
 import com.ethanco.halo.turbo.ads.IHandlerAdapter;
@@ -26,21 +27,33 @@ public class MulticastClientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_multicast_client);
 
+        halo = new Halo.Builder()
+                .setMode(Mode.MULTICAST)
+                .setSourcePort(19601)
+                .setTargetPort(19602)
+                .setTargetIP("224.0.0.1")
+                .setBufferSize(512)
+                .addHandler(new LogHandler(TAG))
+                .addHandler(new DemoHandler())
+                .setThreadPool(Executors.newCachedThreadPool())
+                .build();
+
         binding.btnConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                halo = new Halo.Builder()
-                        .setMode(Mode.MULTICAST)
-                        .setSourcePort(19601)
-                        .setTargetPort(19602)
-                        .setTargetIP("224.0.0.1")
-                        .setBufferSize(512)
-                        .addHandler(new LogHandler(TAG))
-                        .addHandler(new DemoHandler())
-                        .setThreadPool(Executors.newCachedThreadPool())
-                        .build();
+                if (halo.isRunning()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MulticastClientActivity.this, "已启动", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    return;
+                }
 
-                halo.start();
+                boolean result = halo.start();
+                String startSuccess = result ? "连接成功" : "连接失败";
+                binding.tvInfo.append(startSuccess + "\r\n");
             }
         });
 
@@ -48,6 +61,16 @@ public class MulticastClientActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 session.write("send-112233");
+            }
+        });
+
+        binding.btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (halo != null) {
+                    halo.stop();
+                    binding.tvInfo.append("停止连接" + "\r\n");
+                }
             }
         });
     }
