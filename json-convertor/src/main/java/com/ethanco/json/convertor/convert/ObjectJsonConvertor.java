@@ -29,7 +29,9 @@ public class ObjectJsonConvertor implements IConvertor {
     @Override
     public Object receiveConvert(Object message) {
         if (message instanceof byte[] || message instanceof Byte[]) {
-            return new String((byte[]) message);
+            return new String((byte[]) message).trim();
+        } else if (message instanceof String) {
+            return ((String) (message)).trim();
         }
         return message;
     }

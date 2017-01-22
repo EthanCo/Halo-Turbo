@@ -27,6 +27,6 @@ public class StringByteConvertor implements IConvertor {
 
     @Override
     public Object receiveConvert(Object message) {
-        return new String((byte[]) message);
+        return new String((byte[]) message).trim();
     }
 }

@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.ethanco.halo.turbo.Halo;
 import com.ethanco.halo.turbo.ads.IHandlerAdapter;
 import com.ethanco.halo.turbo.ads.ISession;
-import com.ethanco.halo.turbo.impl.handler.ByteLogHandler;
+import com.ethanco.halo.turbo.impl.handler.HexLogHandler;
 import com.ethanco.halo.turbo.type.Mode;
 import com.ethanco.sample.databinding.ActivityMulticastClientBinding;
 
@@ -33,7 +33,7 @@ public class MulticastClientActivity extends AppCompatActivity {
                 .setTargetPort(19602)
                 .setTargetIP("224.0.0.1")
                 .setBufferSize(512)
-                .addHandler(new ByteLogHandler(TAG))
+                .addHandler(new HexLogHandler(TAG))
                 //.addHandler(new StringLogHandler(TAG))
                 .addHandler(new DemoHandler())
                 .setThreadPool(Executors.newCachedThreadPool())

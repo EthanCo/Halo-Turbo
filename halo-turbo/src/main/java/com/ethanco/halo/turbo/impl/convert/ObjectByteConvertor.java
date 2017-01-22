@@ -27,6 +27,9 @@ public class ObjectByteConvertor implements IConvertor {
 
     @Override
     public Object receiveConvert(Object message) {
+        if (message instanceof String) {
+            ((String) message).trim();
+        }
         return message;
     }
 }

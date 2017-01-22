@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.ethanco.halo.turbo.Halo;
 import com.ethanco.halo.turbo.ads.IHandlerAdapter;
 import com.ethanco.halo.turbo.ads.ISession;
-import com.ethanco.halo.turbo.impl.handler.ByteLogHandler;
+import com.ethanco.halo.turbo.impl.handler.StringLogHandler;
 import com.ethanco.halo.turbo.type.Mode;
 import com.ethanco.json.convertor.convert.ObjectJsonConvertor;
 import com.ethanco.sample.databinding.ActivityMinaTcpClientBinding;
@@ -44,7 +44,7 @@ public class MinaTcpClientActivity extends AppCompatActivity {
                                     .setBufferSize(2048)
                                     .setTargetIP(targetIP)
                                     .setTargetPort(19701)
-                                    .addHandler(new ByteLogHandler(TAG))
+                                    .addHandler(new StringLogHandler(TAG))
                                     .addHandler(new DemoHandler())
                                     .addConvert(new ObjectJsonConvertor()) //增加转换器 -> write的时候自动转换为Json字符串
                                     .build();

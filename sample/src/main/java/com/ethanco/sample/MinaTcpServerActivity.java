@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.ethanco.halo.turbo.Halo;
 import com.ethanco.halo.turbo.ads.IHandlerAdapter;
 import com.ethanco.halo.turbo.ads.ISession;
-import com.ethanco.halo.turbo.impl.handler.ByteLogHandler;
+import com.ethanco.halo.turbo.impl.handler.StringLogHandler;
 import com.ethanco.halo.turbo.type.Mode;
 import com.ethanco.sample.databinding.ActivityMinaTcpServerBinding;
 
@@ -28,7 +28,7 @@ public class MinaTcpServerActivity extends AppCompatActivity {
                 .setMode(Mode.MINA_NIO_TCP_SERVER)
                 .setBufferSize(2048)
                 .setSourcePort(19701)
-                .addHandler(new ByteLogHandler(TAG))
+                .addHandler(new StringLogHandler(TAG))
                 .addHandler(new DemoHandler())
                 .build();
 
