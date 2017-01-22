@@ -46,7 +46,7 @@ public class MinaTcpClientActivity extends AppCompatActivity {
                                     .setTargetPort(19701)
                                     .addHandler(new ByteLogHandler(TAG))
                                     .addHandler(new DemoHandler())
-                                    .addConvert(new ObjectJsonConvertor())
+                                    .addConvert(new ObjectJsonConvertor()) //增加转换器 -> write的时候自动转换为Json字符串
                                     .build();
                         }
 
@@ -105,19 +105,14 @@ public class MinaTcpClientActivity extends AppCompatActivity {
 
         @Override
         public void messageReceived(ISession session, Object message) {
-            if (message instanceof String) {
-                String receive = String.valueOf(message);
-                binding.tvInfo.append("接收:" + receive + "\r\n");
-            }
+            String receive = String.valueOf(message);
+            binding.tvInfo.append("接收:" + receive + "\r\n");
         }
 
         @Override
         public void messageSent(ISession session, Object message) {
             super.messageSent(session, message);
-            if (message instanceof String) {
-                String sendData = String.valueOf(message);
-                binding.tvInfo.append("发送:" + sendData + "\r\n");
-            }
+            binding.tvInfo.append("发送:" + message + "\r\n");
         }
 
         @Override

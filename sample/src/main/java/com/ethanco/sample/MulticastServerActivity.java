@@ -95,16 +95,14 @@ public class MulticastServerActivity extends AppCompatActivity {
 
         @Override
         public void messageReceived(ISession session, Object message) {
-            String result = new String((byte[]) message).trim();
-            binding.tvInfo.append("messageReceived data:" + result + "\r\n");
+            binding.tvInfo.append("messageReceived data:" + message + "\r\n");
 
             session.write("------>>>> 回复你的");
         }
 
         @Override
         public void messageSent(ISession session, Object message) {
-            String result = new String((byte[]) message).trim();
-            binding.tvInfo.append("messageSent data:" + result + "\r\n");
+            binding.tvInfo.append("messageSent data:" + message + "\r\n");
         }
     }
 }

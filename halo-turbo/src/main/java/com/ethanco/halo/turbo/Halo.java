@@ -68,7 +68,7 @@ public class Halo extends AbstractHalo {
             this.sourcePort = 19700;
             this.bufferSize = 1024;
             this.handlers = new ArrayList<>();
-            this.convertors = new ArrayList<>();
+            //this.convertors = new ArrayList<>();
             //需要的自行进行初始化
             //this.threadPool = Executors.newCachedThreadPool();
         }

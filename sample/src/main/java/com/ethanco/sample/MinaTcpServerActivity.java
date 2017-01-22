@@ -84,20 +84,13 @@ public class MinaTcpServerActivity extends AppCompatActivity {
         @Override
         public void messageReceived(ISession session, Object message) {
             session.write("这是服务端，我已经收到数据了 --->>>666");
-            if (message instanceof String) {
-                String receive = String.valueOf(message);
-                binding.tvInfo.append("接收:" + receive + "\r\n");
-            }
+            binding.tvInfo.append("接收:" + message + "\r\n");
         }
 
         @Override
         public void messageSent(ISession session, Object message) {
             super.messageSent(session, message);
-
-            if (message instanceof String) {
-                String sendData = String.valueOf(message);
-                binding.tvInfo.append("发送:" + sendData + "\r\n");
-            }
+            binding.tvInfo.append("发送:" + message + "\r\n");
         }
     }
 }

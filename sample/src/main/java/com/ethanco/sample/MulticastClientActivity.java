@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.ethanco.halo.turbo.Halo;
 import com.ethanco.halo.turbo.ads.IHandlerAdapter;
 import com.ethanco.halo.turbo.ads.ISession;
-import com.ethanco.halo.turbo.impl.handler.StringLogHandler;
+import com.ethanco.halo.turbo.impl.handler.ByteLogHandler;
 import com.ethanco.halo.turbo.type.Mode;
 import com.ethanco.sample.databinding.ActivityMulticastClientBinding;
 
@@ -33,8 +33,8 @@ public class MulticastClientActivity extends AppCompatActivity {
                 .setTargetPort(19602)
                 .setTargetIP("224.0.0.1")
                 .setBufferSize(512)
-                //.addHandler(new ByteLogHandler(TAG))
-                .addHandler(new StringLogHandler(TAG))
+                .addHandler(new ByteLogHandler(TAG))
+                //.addHandler(new StringLogHandler(TAG))
                 .addHandler(new DemoHandler())
                 .setThreadPool(Executors.newCachedThreadPool())
                 .build();
@@ -97,14 +97,12 @@ public class MulticastClientActivity extends AppCompatActivity {
 
         @Override
         public void messageReceived(ISession session, Object message) {
-            String result = new String((byte[]) message).trim();
-            binding.tvInfo.append("messageReceived data:" + result + "\r\n");
+            binding.tvInfo.append("messageReceived data:" + message + "\r\n");
         }
 
         @Override
         public void messageSent(ISession session, Object message) {
-            String sendData = new String((byte[]) message).trim();
-            binding.tvInfo.append("messageSent data:" + sendData + "\r\n");
+            binding.tvInfo.append("messageSent data:" + message + "\r\n");
         }
     }
 }

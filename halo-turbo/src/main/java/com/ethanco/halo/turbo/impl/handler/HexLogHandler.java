@@ -4,18 +4,18 @@ import com.ethanco.halo.turbo.ads.BaseLogHandler;
 import com.ethanco.halo.turbo.utils.HexUtil;
 
 /**
- * 默认日志处理
+ * 16进制 日志处理
  *
  * @author EthanCo
  * @since 2017/1/18
  */
 
-public class ByteLogHandler extends BaseLogHandler {
+public class HexLogHandler extends BaseLogHandler {
 
-    public ByteLogHandler() {
+    public HexLogHandler() {
     }
 
-    public ByteLogHandler(String tag) {
+    public HexLogHandler(String tag) {
         super(tag);
     }
 

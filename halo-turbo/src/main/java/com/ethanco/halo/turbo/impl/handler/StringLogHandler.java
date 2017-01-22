@@ -41,7 +41,7 @@ public class StringLogHandler extends BaseLogHandler {
         if (message instanceof byte[]) {
             receive = new String((byte[]) message);
         } else if (message instanceof String) {
-            receive = String.valueOf(message);
+            receive = (String) message;
         } else {
             receive = message.toString();
         }

@@ -11,6 +11,7 @@ import com.ethanco.halo.turbo.impl.convert.StringByteConvertor;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,6 +36,9 @@ public class MulticastSocket extends AbstractSocket {
 
     private void initConvertors() {
         List<IConvertor> convertors = this.config.convertors;
+        if (convertors == null) {
+            convertors = new ArrayList<>();
+        }
         //add default convertor
         convertors.add(new StringByteConvertor());
         convertors.add(new ObjectByteConvertor());
@@ -116,6 +120,19 @@ public class MulticastSocket extends AbstractSocket {
         return socket != null;
     }
 
+    protected void sent(final Object object) throws IOException {
+        Object convertData = convert(object);
+        if (convertData instanceof Byte[] || convertData instanceof Byte[]) {
+            sent((byte[]) convertData);
+        } else {
+            final DatagramPacket packet;
+            byte[] buf = (byte[]) convertData;
+            packet = new DatagramPacket(buf, buf.length, address, config.targetPort);
+            socket.send(packet);
+            messageSent(session, object);
+        }
+    }
+
     protected void sent(final byte[] buf) throws IOException {
         final DatagramPacket packet;
         packet = new DatagramPacket(buf, buf.length, address, config.targetPort);
@@ -128,7 +145,7 @@ public class MulticastSocket extends AbstractSocket {
         byte[] rev = new byte[config.bufferSize];
         packet = new DatagramPacket(rev, rev.length);
         socket.receive(packet);
-        Object receive = convert(packet.getData());
+        Object receive = receive(packet.getData());
         messageReceived(session, receive);
     }
 
@@ -139,11 +156,8 @@ public class MulticastSocket extends AbstractSocket {
             threadPool.execute(new Runnable() {
                 @Override
                 public void run() {
-                    byte[] buf = (byte[]) convert(message);
-                    if (buf == null) return;
-
                     try {
-                        sent(buf);
+                        sent(message);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

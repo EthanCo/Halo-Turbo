@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="目标IP"
-            android:text="192.168.39.103" />
+            android:text="192.168.39.104" />
 
         <Button
             android:id="@+id/btn_connect"
