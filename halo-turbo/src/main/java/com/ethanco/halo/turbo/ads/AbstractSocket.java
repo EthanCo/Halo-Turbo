@@ -21,6 +21,7 @@ public abstract class AbstractSocket implements ISocket, ILog {
 
     public AbstractSocket(Config config) {
         this.config = config;
+        convertManager = new ConvertManager(config.convertors);
         addAllHandler();
         getHandlers();
     }
@@ -73,9 +74,11 @@ public abstract class AbstractSocket implements ISocket, ILog {
         return getClass().getSimpleName();
     }
 
-    protected Object convert(Object message) {
+    public Object convert(Object message) {
         if (convertManager != null) {
-            return convertManager.convert(message);
+            Object convertData = convertManager.convert(message);
+            //Log.i("Z-Test", "convert" + convertData);
+            return convertData;
         }
         return message;
     }

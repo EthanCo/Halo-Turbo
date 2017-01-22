@@ -2,17 +2,13 @@ package com.ethanco.halo.turbo.impl.socket;
 
 import com.ethanco.halo.turbo.ads.AbstractSession;
 import com.ethanco.halo.turbo.ads.AbstractSocket;
-import com.ethanco.halo.turbo.ads.IConvertor;
 import com.ethanco.halo.turbo.bean.Config;
-import com.ethanco.halo.turbo.impl.convert.ConvertManager;
 import com.ethanco.halo.turbo.impl.convert.ObjectByteConvertor;
 import com.ethanco.halo.turbo.impl.convert.StringByteConvertor;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,14 +31,9 @@ public class MulticastSocket extends AbstractSocket {
     }
 
     private void initConvertors() {
-        List<IConvertor> convertors = this.config.convertors;
-        if (convertors == null) {
-            convertors = new ArrayList<>();
-        }
         //add default convertor
-        convertors.add(new StringByteConvertor());
-        convertors.add(new ObjectByteConvertor());
-        this.convertManager = new ConvertManager(convertors);
+        convertManager.add(new StringByteConvertor());
+        convertManager.add(new ObjectByteConvertor());
     }
 
     private void initSession() {

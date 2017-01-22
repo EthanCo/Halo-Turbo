@@ -97,31 +97,32 @@ public class MinaClientSocket extends AbstractSocket {
         @Override
         public void sessionCreated(IoSession session) throws Exception {
             super.sessionCreated(session);
-            MinaClientSocket.this.sessionCreated(convertToISession(session));
+            MinaClientSocket.this.sessionCreated(convertToISession(session, MinaClientSocket.this));
         }
 
         @Override
         public void sessionOpened(IoSession session) throws Exception {
             super.sessionOpened(session);
-            MinaClientSocket.this.sessionOpened(convertToISession(session));
+            MinaClientSocket.this.sessionOpened(convertToISession(session, MinaClientSocket.this));
         }
 
         @Override
         public void messageReceived(IoSession session, Object message) throws Exception {
             super.messageReceived(session, message);
-            MinaClientSocket.this.messageReceived(convertToISession(session), receive(message));
+            MinaClientSocket.this.messageReceived(convertToISession(session, MinaClientSocket.this), receive(message));
         }
 
         @Override
         public void messageSent(IoSession session, Object message) throws Exception {
             super.messageSent(session, message);
-            MinaClientSocket.this.messageSent(convertToISession(session), convert(message));
+            //Log.i("Z-Test", "messageSent:" + message);
+            MinaClientSocket.this.messageSent(convertToISession(session, MinaClientSocket.this), message);
         }
 
         @Override
         public void sessionClosed(IoSession session) throws Exception {
             super.sessionClosed(session);
-            MinaClientSocket.this.sessionClosed(convertToISession(session));
+            MinaClientSocket.this.sessionClosed(convertToISession(session, MinaClientSocket.this));
         }
     }
 }

@@ -17,6 +17,23 @@ public class ConvertManager {
         this.convertChain = convertChain;
     }
 
+    public void add(IConvertor convertor) {
+        if (convertChain == null) {
+            return;
+        }
+        if (!convertChain.contains(convertor)) {
+            convertChain.add(convertor);
+        }
+    }
+
+    public void remove(IConvertor convertor) {
+        if (convertChain == null) {
+            return;
+        }
+
+        convertChain.remove(convertor);
+    }
+
     public Object convert(Object message) {
         if (convertChain == null) {
             return message;

@@ -80,6 +80,7 @@ public class MinaTcpClientActivity extends AppCompatActivity {
                     Toast.makeText(MinaTcpClientActivity.this, "未建立连接", Toast.LENGTH_SHORT).show();
                 } else {
                     session.write("hello，这是从Client发送的数据");
+                    session.write(new TestBean("aaa", "bbb"));
                 }
             }
         });

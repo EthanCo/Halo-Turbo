@@ -23,7 +23,9 @@ public class ObjectJsonConvertor implements IConvertor {
 
     @Override
     public Object sentConvert(Object message) {
-        return gson.toJson(message);
+        String json = gson.toJson(message);
+        //Log.i("Z-Test", "sentConvert:" + json);
+        return json;
     }
 
     @Override
