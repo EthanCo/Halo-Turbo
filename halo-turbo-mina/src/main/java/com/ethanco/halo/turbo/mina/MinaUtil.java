@@ -1,6 +1,7 @@
 package com.ethanco.halo.turbo.mina;
 
 import com.ethanco.halo.turbo.ads.ISession;
+import com.ethanco.halo.turbo.impl.convert.ConvertManager;
 
 import org.apache.mina.core.session.IoSession;
 
@@ -15,7 +16,7 @@ public class MinaUtil {
     public static final String LOGGER = "logger";
     public static final String CODEC = "codec";
 
-    public static ISession convertToISession(final IoSession ioSession) {
+    public static ISession convertToISession(final IoSession ioSession, final ConvertManager convertManager) {
         return new ISession() {
             @Override
             public void write(Object message) {

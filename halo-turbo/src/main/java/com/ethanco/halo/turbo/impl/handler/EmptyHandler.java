@@ -1,4 +1,4 @@
-package com.ethanco.halo.turbo.impl;
+package com.ethanco.halo.turbo.impl.handler;
 
 import com.ethanco.halo.turbo.ads.IHandlerAdapter;
 

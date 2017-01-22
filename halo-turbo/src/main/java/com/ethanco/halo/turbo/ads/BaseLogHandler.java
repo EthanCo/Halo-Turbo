@@ -1,10 +1,7 @@
-package com.ethanco.halo.turbo.impl;
+package com.ethanco.halo.turbo.ads;
 
 import android.util.Log;
 
-import com.ethanco.halo.turbo.ads.AbstractLog;
-import com.ethanco.halo.turbo.ads.ISession;
-import com.ethanco.halo.turbo.utils.HexUtil;
 import com.ethanco.halo.turbo.utils.Util;
 
 /**
@@ -14,13 +11,13 @@ import com.ethanco.halo.turbo.utils.Util;
  * @since 2017/1/18
  */
 
-public class LogHandler extends AbstractLog {
-    private String tag = Util.HALO;
+public abstract class BaseLogHandler extends AbstractLog {
+    protected String tag = Util.HALO;
 
-    public LogHandler() {
+    public BaseLogHandler() {
     }
 
-    public LogHandler(String tag) {
+    public BaseLogHandler(String tag) {
         this.tag = tag;
     }
 
@@ -51,23 +48,9 @@ public class LogHandler extends AbstractLog {
         printLog("messageSent:" + sendData);
     }
 
-    private String convertToString(Object message) {
-        if (message == null) {
-            return "message is null";
-        }
+    protected abstract String convertToString(Object message);
 
-        String receive;
-        if (message instanceof byte[]) {
-            receive = HexUtil.bytesToHexString((byte[]) message);
-        } else if (message instanceof String) {
-            receive = String.valueOf(message);
-        } else {
-            receive = message.toString();
-        }
-        return receive;
-    }
-
-    private void printLog(String sessionCreated) {
+    protected void printLog(String sessionCreated) {
         Log.i(tag, sessionCreated);
     }
 

@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.ethanco.halo.turbo.bean.Config;
+import com.ethanco.halo.turbo.impl.convert.ConvertManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public abstract class AbstractSocket implements ISocket, ILog {
     protected ISession session = null;
     protected List<IHandler> handlers = new ArrayList<>();
     protected Handler M = new Handler(Looper.getMainLooper());
+    protected ConvertManager convertManager;
 
     public AbstractSocket(Config config) {
         this.config = config;
@@ -69,6 +71,21 @@ public abstract class AbstractSocket implements ISocket, ILog {
 
     protected String getSimpleName() {
         return getClass().getSimpleName();
+    }
+
+    protected Object convert(Object message) {
+        if (convertManager != null) {
+            return convertManager.convert(message);
+        }
+        return message;
+    }
+
+    protected Object receive(Object message) {
+        if (convertManager != null) {
+            return convertManager.receive(message);
+        }
+
+        return message;
     }
 
     @Override

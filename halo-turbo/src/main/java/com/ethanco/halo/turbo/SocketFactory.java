@@ -2,7 +2,7 @@ package com.ethanco.halo.turbo;
 
 import com.ethanco.halo.turbo.ads.ISocket;
 import com.ethanco.halo.turbo.bean.Config;
-import com.ethanco.halo.turbo.impl.MulticastSocket;
+import com.ethanco.halo.turbo.impl.socket.MulticastSocket;
 import com.ethanco.halo.turbo.type.Mode;
 
 import java.lang.reflect.Constructor;

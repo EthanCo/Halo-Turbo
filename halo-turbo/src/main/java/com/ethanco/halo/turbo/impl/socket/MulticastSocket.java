@@ -1,12 +1,17 @@
-package com.ethanco.halo.turbo.impl;
+package com.ethanco.halo.turbo.impl.socket;
 
 import com.ethanco.halo.turbo.ads.AbstractSession;
 import com.ethanco.halo.turbo.ads.AbstractSocket;
+import com.ethanco.halo.turbo.ads.IConvertor;
 import com.ethanco.halo.turbo.bean.Config;
+import com.ethanco.halo.turbo.impl.convert.ConvertManager;
+import com.ethanco.halo.turbo.impl.convert.ObjectByteConvertor;
+import com.ethanco.halo.turbo.impl.convert.StringByteConvertor;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,9 +28,17 @@ public class MulticastSocket extends AbstractSocket {
 
     public MulticastSocket(Config config) {
         super(config);
-
+        initConvertors();
         assignThreadPool(config);
         initSession();
+    }
+
+    private void initConvertors() {
+        List<IConvertor> convertors = this.config.convertors;
+        //add default convertor
+        convertors.add(new StringByteConvertor());
+        convertors.add(new ObjectByteConvertor());
+        this.convertManager = new ConvertManager(convertors);
     }
 
     private void initSession() {
@@ -115,7 +128,8 @@ public class MulticastSocket extends AbstractSocket {
         byte[] rev = new byte[config.bufferSize];
         packet = new DatagramPacket(rev, rev.length);
         socket.receive(packet);
-        messageReceived(session, packet.getData());
+        Object receive = convert(packet.getData());
+        messageReceived(session, receive);
     }
 
     private class DefaultSession extends AbstractSession {
@@ -125,7 +139,7 @@ public class MulticastSocket extends AbstractSocket {
             threadPool.execute(new Runnable() {
                 @Override
                 public void run() {
-                    byte[] buf = convertToBuffer(message);
+                    byte[] buf = (byte[]) convert(message);
                     if (buf == null) return;
 
                     try {
@@ -142,7 +156,7 @@ public class MulticastSocket extends AbstractSocket {
             stop();
         }
 
-        private byte[] convertToBuffer(Object message) {
+        /*private byte[] convertToBuffer(Object message) {
             byte[] buf = null;
             if (message instanceof byte[]) {
                 buf = (byte[]) (message);
@@ -150,13 +164,13 @@ public class MulticastSocket extends AbstractSocket {
                 String s = String.valueOf(message);
                 buf = s.getBytes();
             } else {
-                throw new IllegalArgumentException("message type is not supported");
+
             }
 
             if (buf == null) {
                 return null;
             }
             return buf;
-        }
+        }*/
     }
 }

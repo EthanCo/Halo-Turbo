@@ -95,31 +95,33 @@ public class MinaServerSocket extends AbstractSocket {
         @Override
         public void sessionCreated(IoSession session) throws Exception {
             super.sessionCreated(session);
-            MinaServerSocket.this.sessionCreated(convertToISession(session));
+            MinaServerSocket.this.sessionCreated(convertToISession(session, convertManager));
         }
 
         @Override
         public void sessionOpened(IoSession session) throws Exception {
             super.sessionOpened(session);
-            MinaServerSocket.this.sessionOpened(convertToISession(session));
+            MinaServerSocket.this.sessionOpened(convertToISession(session, convertManager));
         }
 
         @Override
         public void messageReceived(IoSession session, Object message) throws Exception {
             super.messageReceived(session, message);
-            MinaServerSocket.this.messageReceived(convertToISession(session), message);
+            MinaServerSocket.this.messageReceived(
+                    convertToISession(session, convertManager), receive(message));
         }
 
         @Override
         public void messageSent(IoSession session, Object message) throws Exception {
             super.messageSent(session, message);
-            MinaServerSocket.this.messageSent(convertToISession(session), message);
+            MinaServerSocket.this.messageSent(
+                    convertToISession(session, convertManager), convert(message));
         }
 
         @Override
         public void sessionClosed(IoSession session) throws Exception {
             super.sessionClosed(session);
-            MinaServerSocket.this.sessionClosed(convertToISession(session));
+            MinaServerSocket.this.sessionClosed(convertToISession(session, convertManager));
         }
     }
 }
