@@ -109,13 +109,13 @@ public class MinaClientSocket extends AbstractSocket {
         @Override
         public void messageReceived(IoSession session, Object message) throws Exception {
             super.messageReceived(session, message);
-            MinaClientSocket.this.messageReceived(convertToISession(session), message);
+            MinaClientSocket.this.messageReceived(convertToISession(session), receive(message));
         }
 
         @Override
         public void messageSent(IoSession session, Object message) throws Exception {
             super.messageSent(session, message);
-            MinaClientSocket.this.messageSent(convertToISession(session), message);
+            MinaClientSocket.this.messageSent(convertToISession(session), convert(message));
         }
 
         @Override
