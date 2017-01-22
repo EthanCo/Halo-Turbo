@@ -6,7 +6,8 @@ import com.ethanco.halo.turbo.ads.ISession;
 import org.apache.mina.core.session.IoSession;
 
 import java.lang.ref.WeakReference;
-import java.util.WeakHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Mina 工具类
@@ -19,7 +20,8 @@ public class MinaUtil {
     public static final String LOGGER = "logger";
     public static final String CODEC = "codec";
 
-    public static WeakHashMap<IoSession, ISession> sessionMap = new WeakHashMap<>();
+    //public static Map<IoSession, ISession> sessionMap = new WeakHashMap<>();
+    public static Map<IoSession, ISession> sessionMap = new HashMap<>();
 
     public static ISession convertToISession(final IoSession ioSession, final AbstractSocket socket) {
         ISession session = sessionMap.get(ioSession);
