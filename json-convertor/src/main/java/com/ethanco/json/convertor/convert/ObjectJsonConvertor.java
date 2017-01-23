@@ -23,6 +23,10 @@ public class ObjectJsonConvertor implements IConvertor {
 
     @Override
     public Object sentConvert(Object message) {
+        if (message instanceof String || message instanceof Byte[] || message instanceof byte[]) {
+            return message;
+        }
+
         String json = gson.toJson(message);
         //Log.i("Z-Test", "sentConvert:" + json);
         return json;
