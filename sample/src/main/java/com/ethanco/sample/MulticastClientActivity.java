@@ -74,6 +74,8 @@ public class MulticastClientActivity extends AppCompatActivity {
                 }
             }
         });
+
+        binding.tvInfo.addTextChangedListener(new ScrollBottomTextWatcher(binding.scrollView));
     }
 
     class DemoHandler extends IHandlerAdapter {

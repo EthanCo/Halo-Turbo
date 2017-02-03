@@ -79,7 +79,7 @@ public class MinaTcpClientActivity extends AppCompatActivity {
                 if (session == null) {
                     Toast.makeText(MinaTcpClientActivity.this, "未建立连接", Toast.LENGTH_SHORT).show();
                 } else {
-                    session.write("hello，这是从Client发送的数据");
+                    //session.write("hello，这是从Client发送的数据");
                     session.write(new TestBean("aaa", "bbb"));
                 }
             }
@@ -94,6 +94,8 @@ public class MinaTcpClientActivity extends AppCompatActivity {
                 }
             }
         });
+
+        binding.tvInfo.addTextChangedListener(new ScrollBottomTextWatcher(binding.scrollView));
     }
 
     class DemoHandler extends IHandlerAdapter {

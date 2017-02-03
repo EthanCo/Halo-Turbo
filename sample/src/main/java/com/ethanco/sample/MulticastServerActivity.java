@@ -66,6 +66,8 @@ public class MulticastServerActivity extends AppCompatActivity {
                 }
             }
         });
+
+        binding.tvInfo.addTextChangedListener(new ScrollBottomTextWatcher(binding.scrollView));
     }
 
     @Override
@@ -96,7 +98,6 @@ public class MulticastServerActivity extends AppCompatActivity {
         @Override
         public void messageReceived(ISession session, Object message) {
             binding.tvInfo.append("messageReceived data:" + message + "\r\n");
-
             session.write("------>>>> 回复你的");
         }
 

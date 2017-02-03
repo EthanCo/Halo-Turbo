@@ -70,6 +70,8 @@ public class MinaTcpServerActivity extends AppCompatActivity {
                 }
             }
         });
+
+        binding.tvInfo.addTextChangedListener(new ScrollBottomTextWatcher(binding.scrollView));
     }
 
     @Override
