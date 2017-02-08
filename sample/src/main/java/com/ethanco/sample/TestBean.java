@@ -31,4 +31,12 @@ public class TestBean {
     public void setArg2(String arg2) {
         this.arg2 = arg2;
     }
+
+    @Override
+    public String toString() {
+        return "TestBean{" +
+                "arg1='" + arg1 + '\'' +
+                ", arg2='" + arg2 + '\'' +
+                '}';
+    }
 }

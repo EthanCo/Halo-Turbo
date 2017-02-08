@@ -26,7 +26,7 @@ public class HexLogHandler extends BaseLogHandler {
         }
 
         String receive;
-        if (message instanceof byte[]) {
+        if (message instanceof byte[] || message instanceof Byte[]) {
             receive = HexUtil.bytesToHexString((byte[]) message);
         } else if (message instanceof String) {
             receive = (String) message;

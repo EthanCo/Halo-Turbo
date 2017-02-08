@@ -116,7 +116,7 @@ public class MinaClientSocket extends AbstractSocket {
         public void messageSent(IoSession session, Object message) throws Exception {
             super.messageSent(session, message);
             //Log.i("Z-Test", "messageSent:" + message);
-            MinaClientSocket.this.messageSent(convertToISession(session, MinaClientSocket.this), message);
+            //MinaClientSocket.this.messageSent(convertToISession(session, MinaClientSocket.this), message);
         }
 
         @Override

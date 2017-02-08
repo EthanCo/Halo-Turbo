@@ -11,6 +11,7 @@ import com.ethanco.halo.turbo.ads.IHandlerAdapter;
 import com.ethanco.halo.turbo.ads.ISession;
 import com.ethanco.halo.turbo.impl.handler.HexLogHandler;
 import com.ethanco.halo.turbo.type.Mode;
+import com.ethanco.json.convertor.convert.ObjectJsonByteConvertor;
 import com.ethanco.sample.databinding.ActivityMulticastClientBinding;
 
 import java.util.concurrent.Executors;
@@ -36,6 +37,7 @@ public class MulticastClientActivity extends AppCompatActivity {
                 .addHandler(new HexLogHandler(TAG))
                 //.addHandler(new StringLogHandler(TAG))
                 .addHandler(new DemoHandler())
+                .addConvert(new ObjectJsonByteConvertor())
                 .setThreadPool(Executors.newCachedThreadPool())
                 .build();
 
@@ -61,7 +63,8 @@ public class MulticastClientActivity extends AppCompatActivity {
         binding.btnSendData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                session.write("send-112233");
+                //session.write("send-112233");
+                session.write(new TestBean("cc1", "dd3"));
             }
         });
 

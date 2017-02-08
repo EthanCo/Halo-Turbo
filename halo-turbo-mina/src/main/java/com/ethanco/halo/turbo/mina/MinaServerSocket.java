@@ -113,7 +113,7 @@ public class MinaServerSocket extends AbstractSocket {
         @Override
         public void messageSent(IoSession session, Object message) throws Exception {
             super.messageSent(session, message);
-            MinaServerSocket.this.messageSent(convertToISession(session, MinaServerSocket.this), message);
+            //MinaServerSocket.this.messageSent(convertToISession(session, MinaServerSocket.this), message);
         }
 
         @Override

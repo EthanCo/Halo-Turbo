@@ -39,6 +39,7 @@ public class MinaUtil {
 
                     Object result = socket.convert(message);
                     ioSession.write(result);
+                    socket.messageSent(this, message);
                 }
 
                 @Override

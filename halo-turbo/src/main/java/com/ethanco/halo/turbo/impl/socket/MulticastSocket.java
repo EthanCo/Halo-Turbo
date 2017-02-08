@@ -113,22 +113,18 @@ public class MulticastSocket extends AbstractSocket {
 
     protected void sent(final Object object) throws IOException {
         Object convertData = convert(object);
-        if (convertData instanceof Byte[] || convertData instanceof Byte[]) {
+        if (convertData instanceof Byte[] || convertData instanceof byte[]) {
             sent((byte[]) convertData);
         } else {
-            final DatagramPacket packet;
-            byte[] buf = (byte[]) convertData;
-            packet = new DatagramPacket(buf, buf.length, address, config.targetPort);
-            socket.send(packet);
-            messageSent(session, object);
+            sent(convertData.toString().getBytes());
         }
+        messageSent(session, object);
     }
 
     protected void sent(final byte[] buf) throws IOException {
         final DatagramPacket packet;
         packet = new DatagramPacket(buf, buf.length, address, config.targetPort);
         socket.send(packet);
-        messageSent(session, packet.getData());
     }
 
     protected void receive() throws IOException {
