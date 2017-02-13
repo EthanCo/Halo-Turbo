@@ -19,6 +19,7 @@ public class MulticastServerActivity extends AppCompatActivity {
 
     public static final String TAG = "Z-Server";
     private ActivityMulticastServerBinding binding;
+    private ScrollBottomTextWatcher watcher;
     private Halo halo;
 
     @Override
@@ -67,7 +68,8 @@ public class MulticastServerActivity extends AppCompatActivity {
             }
         });
 
-        binding.tvInfo.addTextChangedListener(new ScrollBottomTextWatcher(binding.scrollView));
+        watcher = new ScrollBottomTextWatcher(binding.scrollView);
+        binding.tvInfo.addTextChangedListener(watcher);
     }
 
     @Override
@@ -75,6 +77,11 @@ public class MulticastServerActivity extends AppCompatActivity {
         super.onDestroy();
         if (halo != null) {
             halo.stop();
+        }
+
+        if (watcher != null) {
+            binding.tvInfo.removeTextChangedListener(watcher);
+            watcher = null;
         }
     }
 

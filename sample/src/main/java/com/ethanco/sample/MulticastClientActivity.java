@@ -20,6 +20,7 @@ public class MulticastClientActivity extends AppCompatActivity {
 
     private static final String TAG = "Z-Client";
     private ActivityMulticastClientBinding binding;
+    private ScrollBottomTextWatcher watcher;
     private Halo halo;
     private ISession session;
 
@@ -78,7 +79,17 @@ public class MulticastClientActivity extends AppCompatActivity {
             }
         });
 
-        binding.tvInfo.addTextChangedListener(new ScrollBottomTextWatcher(binding.scrollView));
+        watcher = new ScrollBottomTextWatcher(binding.scrollView);
+        binding.tvInfo.addTextChangedListener(watcher);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (watcher != null) {
+            binding.tvInfo.removeTextChangedListener(watcher);
+            watcher = null;
+        }
     }
 
     class DemoHandler extends IHandlerAdapter {
