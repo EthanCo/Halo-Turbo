@@ -36,9 +36,13 @@ public class MinaServerSocket extends AbstractSocket {
     private void init(Config config) {
         address = new InetSocketAddress(config.sourcePort);
         acceptor = new NioSocketAcceptor();
-        acceptor.getFilterChain().addLast(LOGGER, new LoggingFilter());
-        acceptor.getFilterChain().addLast(CODEC,
-                new ProtocolCodecFilter(new ObjectSerializationCodecFactory()));
+        if (acceptor.getFilterChain().get(LOGGER) == null) {
+            acceptor.getFilterChain().addLast(LOGGER, new LoggingFilter());
+        }
+        if (acceptor.getFilterChain().get(CODEC) == null) {
+            acceptor.getFilterChain().addLast(CODEC,
+                    new ProtocolCodecFilter(new ObjectSerializationCodecFactory()));
+        }
         acceptor.setHandler(new MinaServerHandler());
         acceptor.getSessionConfig().setReadBufferSize(config.bufferSize);
         acceptor.getSessionConfig().setIdleTime(IdleStatus.WRITER_IDLE, 10);

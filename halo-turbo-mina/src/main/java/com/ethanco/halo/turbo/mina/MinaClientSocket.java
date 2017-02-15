@@ -38,9 +38,13 @@ public class MinaClientSocket extends AbstractSocket {
         address = new InetSocketAddress(config.targetIP, config.targetPort);
         connector = new NioSocketConnector();
         connector.setDefaultRemoteAddress(address);
-        connector.getFilterChain().addLast(LOGGER, new LoggingFilter());
-        connector.getFilterChain().addLast(CODEC, new ProtocolCodecFilter(
-                new ObjectSerializationCodecFactory()));
+        if (connector.getFilterChain().get(LOGGER) == null) {
+            connector.getFilterChain().addLast(LOGGER, new LoggingFilter());
+        }
+        if (connector.getFilterChain().get(CODEC) == null) {
+            connector.getFilterChain().addLast(CODEC, new ProtocolCodecFilter(
+                    new ObjectSerializationCodecFactory()));
+        }
         connector.setHandler(new MinaClientHandler());
         connector.getSessionConfig().setReadBufferSize(config.bufferSize);
         connector.getSessionConfig().setIdleTime(IdleStatus.WRITER_IDLE, 10);
