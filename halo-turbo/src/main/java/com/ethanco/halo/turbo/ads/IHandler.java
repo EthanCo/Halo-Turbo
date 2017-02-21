@@ -20,6 +20,6 @@ public interface IHandler {
     //接收到消息时回调这个方法
     void messageReceived(ISession session, Object message);
 
-    //发送数据是回调这个方法
+    //发送数据时回调这个方法
     void messageSent(ISession session, Object message);
 }
