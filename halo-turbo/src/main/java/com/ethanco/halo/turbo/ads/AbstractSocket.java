@@ -111,7 +111,9 @@ public abstract class AbstractSocket implements ISocket, ILog {
             @Override
             public void run() {
                 for (IHandler handler : handlers) {
-                    handler.sessionOpened(session);
+                    if (handler != null) {
+                        handler.sessionOpened(session);
+                    }
                 }
             }
         });
@@ -123,7 +125,9 @@ public abstract class AbstractSocket implements ISocket, ILog {
             @Override
             public void run() {
                 for (IHandler handler : handlers) {
-                    handler.sessionClosed(session);
+                    if (handler != null) {
+                        handler.sessionClosed(session);
+                    }
                 }
             }
         });
@@ -135,7 +139,9 @@ public abstract class AbstractSocket implements ISocket, ILog {
             @Override
             public void run() {
                 for (IHandler handler : handlers) {
-                    handler.messageReceived(session, message);
+                    if (handler != null) {
+                        handler.messageReceived(session, message);
+                    }
                 }
             }
         });
@@ -147,7 +153,9 @@ public abstract class AbstractSocket implements ISocket, ILog {
             @Override
             public void run() {
                 for (IHandler handler : handlers) {
-                    handler.messageSent(session, message);
+                    if (handler != null) {
+                        handler.messageSent(session, message);
+                    }
                 }
             }
         });
