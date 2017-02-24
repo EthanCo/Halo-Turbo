@@ -97,7 +97,9 @@ public abstract class AbstractSocket implements ISocket, ILog {
             @Override
             public void run() {
                 for (IHandler handler : handlers) {
-                    handler.sessionCreated(session);
+                    if (handler != null) {
+                        handler.sessionCreated(session);
+                    }
                 }
             }
         });
