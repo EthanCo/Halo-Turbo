@@ -25,9 +25,16 @@ public class MulticastSocket extends AbstractSocket {
 
     public MulticastSocket(Config config) {
         super(config);
+        checkConfig(config);
         initConvertors();
         assignThreadPool(config);
         initSession();
+    }
+
+    private void checkConfig(Config config) {
+        if (config.codec != null) {
+            throw new IllegalArgumentException("multicast not support codec");
+        }
     }
 
     private void initConvertors() {

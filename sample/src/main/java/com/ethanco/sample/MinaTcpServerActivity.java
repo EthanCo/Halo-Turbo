@@ -13,6 +13,8 @@ import com.ethanco.halo.turbo.impl.handler.StringLogHandler;
 import com.ethanco.halo.turbo.type.Mode;
 import com.ethanco.sample.databinding.ActivityMinaTcpServerBinding;
 
+import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
+
 public class MinaTcpServerActivity extends AppCompatActivity {
 
     private static final String TAG = "Z-MinaTcpServerActivity";

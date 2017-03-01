@@ -29,4 +29,6 @@ public class Config {
     public List<IHandler> handlers;
 
     public List<IConvertor> convertors;
+
+    public Object codec;
 }

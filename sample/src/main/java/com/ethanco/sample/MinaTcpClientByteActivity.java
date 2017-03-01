@@ -15,6 +15,8 @@ import com.ethanco.halo.turbo.type.Mode;
 import com.ethanco.halo.turbo.utils.HexUtil;
 import com.ethanco.sample.databinding.ActivityMinaTcpClientBinding;
 
+import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
+
 public class MinaTcpClientByteActivity extends AppCompatActivity {
 
     private static final String TAG = "Z-MinaTcpClientActivity";
@@ -47,7 +49,7 @@ public class MinaTcpClientByteActivity extends AppCompatActivity {
                                     .setTargetPort(19701)
                                     .addHandler(new HexLogHandler(TAG))
                                     .addHandler(new DemoHandler())
-                                    //.addConvert(new ObjectJsonConvertor()) //增加转换器 -> write的时候自动转换为Json字符串
+                                    .setCodec(new ObjectSerializationCodecFactory())
                                     .build();
                         }
 

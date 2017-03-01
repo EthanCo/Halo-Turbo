@@ -14,6 +14,8 @@ import com.ethanco.halo.turbo.type.Mode;
 import com.ethanco.halo.turbo.utils.HexUtil;
 import com.ethanco.sample.databinding.ActivityMinaTcpServerBinding;
 
+import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
+
 public class MinaTcpServerByteActivity extends AppCompatActivity {
 
     private static final String TAG = "Z-MinaTcpServerActivity";
@@ -33,6 +35,7 @@ public class MinaTcpServerByteActivity extends AppCompatActivity {
                 //.addHandler(new StringLogHandler(TAG))
                 .addHandler(new HexLogHandler(TAG))
                 .addHandler(new DemoHandler())
+                .setCodec(new ObjectSerializationCodecFactory())
                 .build();
 
         binding.btnStartServer.setOnClickListener(new View.OnClickListener() {

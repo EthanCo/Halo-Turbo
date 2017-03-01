@@ -6,6 +6,7 @@ import com.ethanco.halo.turbo.bean.Config;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 import org.apache.mina.filter.logging.LoggingFilter;
@@ -40,8 +41,9 @@ public class MinaServerSocket extends AbstractSocket {
             acceptor.getFilterChain().addLast(LOGGER, new LoggingFilter());
         }
         if (acceptor.getFilterChain().get(CODEC) == null) {
-            acceptor.getFilterChain().addLast(CODEC,
-                    new ProtocolCodecFilter(new TextLineCodecFactory()));
+            ProtocolCodecFactory codecFactory = config.codec == null ?
+                    new TextLineCodecFactory() : (ProtocolCodecFactory) config.codec;
+            acceptor.getFilterChain().addLast(CODEC, new ProtocolCodecFilter(codecFactory));
         }
         acceptor.setHandler(new MinaServerHandler());
         acceptor.getSessionConfig().setReadBufferSize(config.bufferSize);

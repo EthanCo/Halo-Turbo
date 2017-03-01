@@ -25,7 +25,6 @@ public class Halo extends AbstractHalo {
         this.haloImpl = SocketFactory.create(builder);
     }
 
-
     @Override
     public boolean start() {
         return this.haloImpl.start();
@@ -131,6 +130,12 @@ public class Halo extends AbstractHalo {
         //这是自定义的转换器列表
         public Builder setConverts(List<IConvertor> convertors) {
             this.convertors = convertors;
+            return this;
+        }
+
+        //设置ProtocolCodecFactory，现仅对Mina有效
+        public Builder setCodec(Object codec) {
+            this.codec = codec;
             return this;
         }
 

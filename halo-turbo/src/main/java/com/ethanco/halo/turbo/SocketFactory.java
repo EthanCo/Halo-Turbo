@@ -11,7 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by EthanCo on 2016/9/19.
  */
-public class SocketFactory {
+class SocketFactory {
 
     public static ISocket create(Config config) {
         ISocket haloImpl;
