@@ -8,7 +8,7 @@ import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
+import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
@@ -42,8 +42,8 @@ public class MinaClientSocket extends AbstractSocket {
             connector.getFilterChain().addLast(LOGGER, new LoggingFilter());
         }
         if (connector.getFilterChain().get(CODEC) == null) {
-            connector.getFilterChain().addLast(CODEC, new ProtocolCodecFilter(
-                    new ObjectSerializationCodecFactory()));
+            connector.getFilterChain().addLast(CODEC,
+                    new ProtocolCodecFilter(new TextLineCodecFactory()));
         }
         connector.setHandler(new MinaClientHandler());
         connector.getSessionConfig().setReadBufferSize(config.bufferSize);
