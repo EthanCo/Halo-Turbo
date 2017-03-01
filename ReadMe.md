@@ -15,9 +15,9 @@ Add it in your root build.gradle at the end of repositories:
 ###Step 2. Add the dependency  
 
 	dependencies {
-        compile 'com.github.EthanCo.Halo-Turbo:halo-turbo:2.1.4'
-		compile 'com.github.EthanCo.Halo-Turbo:halo-turbo-mina:2.1.4'
-		compile 'com.github.EthanCo.Halo-Turbo:json-convertor:2.1.4'
+        compile 'com.github.EthanCo.Halo-Turbo:halo-turbo:2.1.5'
+		compile 'com.github.EthanCo.Halo-Turbo:halo-turbo-mina:2.1.5'
+		compile 'com.github.EthanCo.Halo-Turbo:json-convertor:2.1.5'
 	}
 
 > halo-turbo是核心库，带有有组播功能  
@@ -110,7 +110,7 @@ ObjectJsonByteConvertor:如果是Object对象，则先转换为json字符串后�
 
 	dependencies {
      	//...
-		compile 'com.github.EthanCo.Halo-Turbo:json-convertor:2.1.4'
+		compile 'com.github.EthanCo.Halo-Turbo:json-convertor:2.1.5'
 	}
 
 ##setBufferSize  
