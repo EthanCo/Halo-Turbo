@@ -119,6 +119,9 @@ ObjectJsonByteConvertor:如果是Object对象，则先转换为json字符串后�
 ##setThreadPool  
 设置自定义线程池  
 
+##setCodec
+现仅用作Mina设置ProtocolCodecFactory
+
 ##其他  
 
 具体详见Sample
