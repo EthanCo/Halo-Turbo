@@ -37,5 +37,19 @@
 
         <include layout="@layout/include_divider" />
 
+        <TextView
+            android:id="@+id/tv_mina_tcp_client_byte"
+            style="@style/HomeItemText"
+            android:text="MINA TCP CLIENT BYTE ACTIVITY" />
+
+        <include layout="@layout/include_divider" />
+
+        <TextView
+            android:id="@+id/tv_mina_tcp_server_byte"
+            style="@style/HomeItemText"
+            android:text="MINA TCP SERVER BYTE ACTIVITY" />
+
+        <include layout="@layout/include_divider" />
+
     </LinearLayout>
 </layout>

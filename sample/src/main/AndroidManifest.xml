@@ -20,7 +20,9 @@
         <activity android:name=".MulticastClientActivity" />
         <activity android:name=".MulticastServerActivity" />
         <activity android:name=".MinaTcpClientActivity" />
-        <activity android:name=".MinaTcpServerActivity"></activity>
+        <activity android:name=".MinaTcpServerActivity" />
+        <activity android:name=".MinaTcpClientByteActivity" />
+        <activity android:name=".MinaTcpServerByteActivity" />
     </application>
 
 </manifest>
