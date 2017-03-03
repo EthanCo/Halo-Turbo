@@ -59,6 +59,13 @@ public class HomeActivity extends AppCompatActivity {
                 actionStartAty(MinaTcpServerByteActivity.class);
             }
         });
+
+        binding.tvCommonTcpClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actionStartAty(CommonTcpClientActivity.class);
+            }
+        });
     }
 
     private void actionStartAty(Class<? extends Activity> cls) {

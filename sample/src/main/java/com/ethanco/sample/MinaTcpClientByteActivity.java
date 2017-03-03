@@ -19,7 +19,7 @@ import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactor
 
 public class MinaTcpClientByteActivity extends AppCompatActivity {
 
-    private static final String TAG = "Z-MinaTcpClientActivity";
+    private static final String TAG = "Z-MinaTcpClientByteActivity";
     private ActivityMinaTcpClientBinding binding;
     private ScrollBottomTextWatcher watcher;
     private ISession session;
