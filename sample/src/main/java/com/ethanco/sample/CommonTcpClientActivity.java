@@ -42,6 +42,7 @@ public class CommonTcpClientActivity extends AppCompatActivity {
                     public void run() {
                         try {
                             client = new Socket(targetIP, 19701);
+                            //client = new Socket(targetIP, 21501);
 
                             InputStream in = client.getInputStream();
                             final byte b[] = new byte[1024];
@@ -63,7 +64,7 @@ public class CommonTcpClientActivity extends AppCompatActivity {
                                 }
                             });
 
-                           /* String line;
+                            /*String line;
                             StringBuffer stringBuffer = new StringBuffer();
                             InputStream in = client.getInputStream();
                             Reader reader = new InputStreamReader(in, "UTF-8");
@@ -111,7 +112,8 @@ public class CommonTcpClientActivity extends AppCompatActivity {
                             new OutputStreamWriter(client.getOutputStream()));
                     //final String data = "hello world!333\r\n";
                     //final String data = "hello world!666\n";
-                    final String data = "hello world!999";
+                    //final String data = "hello world!999";
+                    final String data = "{\"cmd\": \"control\",\"params\": {\"playstate\": \"next\"}}\n";
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

@@ -49,6 +49,10 @@ public class MinaUtil {
                     ioSession.closeOnFlush();
                     //ioSession.closeNow();
                 }
+
+                public void setIoSession(IoSession ioSession){
+
+                }
             };
             sessionMap.put(ioSession, session);
         }
