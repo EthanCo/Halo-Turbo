@@ -1,9 +1,12 @@
 package com.ethanco.halo.turbo.mina;
 
+import android.support.annotation.NonNull;
+
 import com.ethanco.halo.turbo.ads.AbstractSocket;
 import com.ethanco.halo.turbo.ads.ISession;
 
 import org.apache.mina.core.session.IoSession;
+import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -17,6 +20,7 @@ import java.util.Map;
  */
 
 public class MinaUtil {
+    private static final int MAX_LINE_LENGTH = 1024 * 20;
     public static final String LOGGER = "logger";
     public static final String CODEC = "codec";
 
@@ -50,7 +54,7 @@ public class MinaUtil {
                     //ioSession.closeNow();
                 }
 
-                public void setIoSession(IoSession ioSession){
+                public void setIoSession(IoSession ioSession) {
 
                 }
             };
@@ -58,5 +62,13 @@ public class MinaUtil {
         }
 
         return session;
+    }
+
+    @NonNull
+    static TextLineCodecFactory getTextLineCodecFactory() {
+        TextLineCodecFactory codec = new TextLineCodecFactory();
+        codec.setDecoderMaxLineLength(MAX_LINE_LENGTH);
+        codec.setEncoderMaxLineLength(MAX_LINE_LENGTH);
+        return codec;
     }
 }

@@ -9,7 +9,6 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
@@ -44,7 +43,7 @@ public class MinaClientSocket extends AbstractSocket {
         }
         if (connector.getFilterChain().get(CODEC) == null) {
             ProtocolCodecFactory codecFactory = config.codec == null ?
-                    new TextLineCodecFactory() : (ProtocolCodecFactory) config.codec;
+                    MinaUtil.getTextLineCodecFactory()  : (ProtocolCodecFactory) config.codec;
             connector.getFilterChain().addLast(CODEC, new ProtocolCodecFilter(codecFactory));
         }
         connector.setHandler(new MinaClientHandler());

@@ -8,7 +8,6 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 
@@ -27,6 +26,7 @@ import static com.ethanco.halo.turbo.mina.MinaUtil.convertToISession;
  */
 
 public class MinaServerSocket extends AbstractSocket {
+
     private NioSocketAcceptor acceptor;
     private InetSocketAddress address;
 
@@ -42,7 +42,7 @@ public class MinaServerSocket extends AbstractSocket {
         }
         if (acceptor.getFilterChain().get(CODEC) == null) {
             ProtocolCodecFactory codecFactory = config.codec == null ?
-                    new TextLineCodecFactory() : (ProtocolCodecFactory) config.codec;
+                    MinaUtil.getTextLineCodecFactory() : (ProtocolCodecFactory) config.codec;
             acceptor.getFilterChain().addLast(CODEC, new ProtocolCodecFilter(codecFactory));
         }
         acceptor.setHandler(new MinaServerHandler());
@@ -50,6 +50,8 @@ public class MinaServerSocket extends AbstractSocket {
         acceptor.getSessionConfig().setIdleTime(IdleStatus.WRITER_IDLE, 10);
         acceptor.setReuseAddress(true); //避免重启时提示地址被占用
     }
+
+
 
     @Override
     public boolean start() {
