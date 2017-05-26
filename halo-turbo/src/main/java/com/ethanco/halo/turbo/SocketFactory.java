@@ -19,7 +19,7 @@ class SocketFactory {
 
         if (mode == Mode.MULTICAST) {
             haloImpl = new MulticastSocket(config);
-        } else{
+        } else {
             haloImpl = createByReflect(mode, config);
         }
         return haloImpl;
@@ -28,9 +28,13 @@ class SocketFactory {
     private static ISocket createByReflect(Mode mode, Config config) {
         String className;
         if (mode == Mode.MINA_NIO_TCP_CLIENT) {
-            className = "com.ethanco.halo.turbo.mina.MinaClientSocket";
+            className = "com.ethanco.halo.turbo.mina.MinaTcpClientSocket";
         } else if (mode == Mode.MINA_NIO_TCP_SERVER) {
-            className = "com.ethanco.halo.turbo.mina.MinaServerSocket";
+            className = "com.ethanco.halo.turbo.mina.MinaTcpServerSocket";
+        } else if (mode == Mode.MINA_NIO_UDP_CLIENT) {
+            className = "com.ethanco.halo.turbo.mina.MinaUdpClientSocket";
+        } else if (mode == Mode.MINA_NIO_UDP_SERVER) {
+            className = "com.ethanco.halo.turbo.mina.MinaUdpServerSocket";
         } else {
             return null;
         }

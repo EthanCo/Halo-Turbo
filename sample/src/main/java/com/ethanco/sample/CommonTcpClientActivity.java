@@ -128,6 +128,7 @@ public class CommonTcpClientActivity extends AppCompatActivity {
             }
         });
 
+        binding.btnSendDataEnter.setVisibility(View.VISIBLE);
         binding.btnSendDataEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

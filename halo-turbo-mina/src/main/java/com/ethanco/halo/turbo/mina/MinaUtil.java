@@ -35,15 +35,21 @@ public class MinaUtil {
                 WeakReference<AbstractSocket> socketRef = new WeakReference<>(socket);
 
                 @Override
-                public void write(Object message) {
-                    AbstractSocket socket = socketRef.get();
+                public void write(final Object message) {
+                    final ISession finalSession = this;
+                    final AbstractSocket socket = socketRef.get();
                     if (socket == null) {
                         return;
                     }
 
-                    Object result = socket.convert(message);
-                    ioSession.write(result);
-                    socket.messageSent(this, message);
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            Object result = socket.convert(message);
+                            ioSession.write(result);
+                            socket.messageSent(finalSession, message);
+                        }
+                    }.start();
                 }
 
                 @Override
@@ -53,10 +59,9 @@ public class MinaUtil {
                     ioSession.closeOnFlush();
                     //ioSession.closeNow();
                 }
-
-                public void setIoSession(IoSession ioSession) {
-
-                }
+//                public void setIoSession(IoSession ioSession) {
+//
+//                }
             };
             sessionMap.put(ioSession, session);
         }

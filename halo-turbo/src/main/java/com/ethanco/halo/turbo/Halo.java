@@ -1,5 +1,7 @@
 package com.ethanco.halo.turbo;
 
+import android.content.Context;
+
 import com.ethanco.halo.turbo.ads.AbstractHalo;
 import com.ethanco.halo.turbo.ads.IConvertor;
 import com.ethanco.halo.turbo.ads.IHandler;
@@ -32,7 +34,9 @@ public class Halo extends AbstractHalo {
 
     @Override
     public void stop() {
-        haloImpl.stop();
+        if (haloImpl != null) {
+            haloImpl.stop();
+        }
     }
 
     @Override
@@ -136,6 +140,11 @@ public class Halo extends AbstractHalo {
         //设置ProtocolCodecFactory，现仅对Mina有效
         public Builder setCodec(Object codec) {
             this.codec = codec;
+            return this;
+        }
+
+        public Builder setContext(Context context) {
+            this.context = context;
             return this;
         }
 

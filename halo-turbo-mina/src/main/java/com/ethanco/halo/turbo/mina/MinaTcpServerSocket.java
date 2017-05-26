@@ -25,12 +25,12 @@ import static com.ethanco.halo.turbo.mina.MinaUtil.convertToISession;
  * @since 2017/1/17
  */
 
-public class MinaServerSocket extends AbstractSocket {
+public class MinaTcpServerSocket extends AbstractSocket {
 
     private NioSocketAcceptor acceptor;
     private InetSocketAddress address;
 
-    public MinaServerSocket(Config config) {
+    public MinaTcpServerSocket(Config config) {
         super(config);
     }
 
@@ -103,19 +103,19 @@ public class MinaServerSocket extends AbstractSocket {
         @Override
         public void sessionCreated(IoSession session) throws Exception {
             super.sessionCreated(session);
-            MinaServerSocket.this.sessionCreated(convertToISession(session, MinaServerSocket.this));
+            MinaTcpServerSocket.this.sessionCreated(convertToISession(session, MinaTcpServerSocket.this));
         }
 
         @Override
         public void sessionOpened(IoSession session) throws Exception {
             super.sessionOpened(session);
-            MinaServerSocket.this.sessionOpened(convertToISession(session, MinaServerSocket.this));
+            MinaTcpServerSocket.this.sessionOpened(convertToISession(session, MinaTcpServerSocket.this));
         }
 
         @Override
         public void messageReceived(IoSession session, Object message) throws Exception {
             super.messageReceived(session, message);
-            MinaServerSocket.this.messageReceived(convertToISession(session, MinaServerSocket.this), receive(message));
+            MinaTcpServerSocket.this.messageReceived(convertToISession(session, MinaTcpServerSocket.this), receive(message));
         }
 
         @Override
@@ -127,7 +127,7 @@ public class MinaServerSocket extends AbstractSocket {
         @Override
         public void sessionClosed(IoSession session) throws Exception {
             super.sessionClosed(session);
-            MinaServerSocket.this.sessionClosed(convertToISession(session, MinaServerSocket.this));
+            MinaTcpServerSocket.this.sessionClosed(convertToISession(session, MinaTcpServerSocket.this));
         }
     }
 }

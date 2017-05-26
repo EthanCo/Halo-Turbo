@@ -12,7 +12,7 @@ Add it in your root build.gradle at the end of repositories:
 		}
 	}  
 
-###Step 2. Add the dependency  
+### Step 2. Add the dependency  
 
 	dependencies {
         compile 'com.github.EthanCo.Halo-Turbo:halo-turbo:2.1.5'
@@ -26,7 +26,7 @@ Add it in your root build.gradle at the end of repositories:
 
 ## 使用 ##
 
-###TCP client
+### TCP client
 
 	Halo halo = new Halo.Builder()
             .setMode(Mode.MINA_NIO_TCP_CLIENT)
@@ -36,7 +36,7 @@ Add it in your root build.gradle at the end of repositories:
             .build();  
 	boolean result = halo.start();
 
-###TCP Server  
+### TCP Server  
 
 	 Halo halo = new Halo.Builder()
             .setMode(Mode.MINA_NIO_TCP_SERVER)
@@ -45,7 +45,7 @@ Add it in your root build.gradle at the end of repositories:
             .build();
 	boolean result = halo.start();
 
-###组播  
+### 组播  
 
 	Halo halo = new Halo.Builder()
             .setMode(Mode.MULTICAST)
@@ -56,10 +56,10 @@ Add it in your root build.gradle at the end of repositories:
             .build();
 	boolean result = halo.start();  
 
-###UDP  
+### UDP  
 //TODO 待实现
 
-###添加回调处理  
+### 添加回调处理  
 
 	new Halo.Builder().addHandler(new DemoHandler())  
 
@@ -84,7 +84,7 @@ Add it in your root build.gradle at the end of repositories:
 	    void messageSent(ISession session, Object message);
 	}  
 
-##添加日志打印  
+## 添加日志打印  
 
 	new Halo.Builder().addHandler(new StringLogHandler(TAG))  
 
@@ -93,7 +93,7 @@ Halo默认实现了如下几个日志打印类，亦可自定义日志打印
 StringLogHandler:默认日志打印，打印成字符串  
 HexLogHandler:Byte日志打印，如果是byte数组，将打印成十六进制  
 
-##添加转换器  
+## 添加转换器  
 通过连接转换器，可在发送数据时，自动转换为相关类别  
 
 	new Halo.Builder().addConvert(new ObjectJsonConvertor())  
@@ -113,16 +113,16 @@ ObjectJsonByteConvertor:如果是Object对象，则先转换为json字符串后�
 		compile 'com.github.EthanCo.Halo-Turbo:json-convertor:2.1.5'
 	}
 
-##setBufferSize  
+## setBufferSize  
 设置Buffer大小  
 
-##setThreadPool  
+## setThreadPool  
 设置自定义线程池  
 
-##setCodec
+## setCodec
 现仅用作Mina设置ProtocolCodecFactory
 
-##其他  
+## 其他  
 
 具体详见Sample
 

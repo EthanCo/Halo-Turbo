@@ -66,6 +66,20 @@ public class HomeActivity extends AppCompatActivity {
                 actionStartAty(CommonTcpClientActivity.class);
             }
         });
+
+        binding.tvMinaUdpClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actionStartAty(MinaUdpClientActivity.class);
+            }
+        });
+
+        binding.tvMinaUdpServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                actionStartAty(MinaUdpServerActivity.class);
+            }
+        });
     }
 
     private void actionStartAty(Class<? extends Activity> cls) {

@@ -1,62 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/activity_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         tools:context="com.ethanco.sample.HomeActivity">
 
-        <TextView
-            android:id="@+id/tv_mul_client"
-            style="@style/HomeItemText"
-            android:text="MUL CLIENT ACTIVITY" />
 
-        <include layout="@layout/include_divider" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_mul_server"
-            style="@style/HomeItemText"
-            android:text="MUL SERVER ACTIVITY" />
+            <LinearLayout
+                android:id="@+id/activity_home"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <include layout="@layout/include_divider" />
+                <TextView
+                    android:id="@+id/tv_mul_client"
+                    style="@style/HomeItemText"
+                    android:text="MUL CLIENT ACTIVITY" />
 
-        <TextView
-            android:id="@+id/tv_mina_tcp_client"
-            style="@style/HomeItemText"
-            android:text="MINA TCP CLIENT ACTIVITY" />
+                <include layout="@layout/include_divider" />
 
-        <include layout="@layout/include_divider" />
+                <TextView
+                    android:id="@+id/tv_mul_server"
+                    style="@style/HomeItemText"
+                    android:text="MUL SERVER ACTIVITY" />
 
-        <TextView
-            android:id="@+id/tv_mina_tcp_server"
-            style="@style/HomeItemText"
-            android:text="MINA TCP SERVER ACTIVITY" />
+                <include layout="@layout/include_divider" />
 
-        <include layout="@layout/include_divider" />
+                <TextView
+                    android:id="@+id/tv_mina_tcp_client"
+                    style="@style/HomeItemText"
+                    android:text="MINA TCP CLIENT ACTIVITY" />
 
-        <TextView
-            android:id="@+id/tv_mina_tcp_client_byte"
-            style="@style/HomeItemText"
-            android:text="MINA TCP CLIENT BYTE ACTIVITY" />
+                <include layout="@layout/include_divider" />
 
-        <include layout="@layout/include_divider" />
+                <TextView
+                    android:id="@+id/tv_mina_tcp_server"
+                    style="@style/HomeItemText"
+                    android:text="MINA TCP SERVER ACTIVITY" />
 
-        <TextView
-            android:id="@+id/tv_mina_tcp_server_byte"
-            style="@style/HomeItemText"
-            android:text="MINA TCP SERVER BYTE ACTIVITY" />
+                <include layout="@layout/include_divider" />
 
-        <include layout="@layout/include_divider" />
+                <TextView
+                    android:id="@+id/tv_mina_tcp_client_byte"
+                    style="@style/HomeItemText"
+                    android:text="MINA TCP CLIENT BYTE ACTIVITY" />
 
-        <TextView
-            android:id="@+id/tv_common_tcp_client"
-            style="@style/HomeItemText"
-            android:text="COMMON TCP SERVER BYTE ACTIVITY" />
+                <include layout="@layout/include_divider" />
 
-        <include layout="@layout/include_divider" />
+                <TextView
+                    android:id="@+id/tv_mina_tcp_server_byte"
+                    style="@style/HomeItemText"
+                    android:text="MINA TCP SERVER BYTE ACTIVITY" />
 
-    </LinearLayout>
+                <include layout="@layout/include_divider" />
+
+                <TextView
+                    android:id="@+id/tv_common_tcp_client"
+                    style="@style/HomeItemText"
+                    android:text="COMMON TCP SERVER BYTE ACTIVITY" />
+
+                <include layout="@layout/include_divider" />
+
+                <TextView
+                    android:id="@+id/tv_mina_udp_client"
+                    style="@style/HomeItemText"
+                    android:text="MINA UDP CLIENT ACTIVITY" />
+
+                <include layout="@layout/include_divider" />
+
+                <TextView
+                    android:id="@+id/tv_mina_udp_server"
+                    style="@style/HomeItemText"
+                    android:text="MINA UDP SERVER ACTIVITY" />
+
+                <include layout="@layout/include_divider" />
+
+
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+
+
 </layout>

@@ -1,5 +1,7 @@
 package com.ethanco.halo.turbo.bean;
 
+import android.content.Context;
+
 import com.ethanco.halo.turbo.ads.IConvertor;
 import com.ethanco.halo.turbo.ads.IHandler;
 import com.ethanco.halo.turbo.type.Mode;
@@ -31,4 +33,6 @@ public class Config {
     public List<IConvertor> convertors;
 
     public Object codec;
+
+    public Context context;
 }

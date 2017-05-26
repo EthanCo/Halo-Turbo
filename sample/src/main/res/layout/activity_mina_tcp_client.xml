@@ -42,6 +42,7 @@
             android:text="Send Data" />
 
         <Button
+            android:visibility="gone"
             android:id="@+id/btn_send_data_enter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

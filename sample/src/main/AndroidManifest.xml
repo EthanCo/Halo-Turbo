@@ -24,6 +24,8 @@
         <activity android:name=".MinaTcpClientByteActivity" />
         <activity android:name=".MinaTcpServerByteActivity" />
         <activity android:name=".CommonTcpClientActivity" />
+        <activity android:name=".MinaUdpClientActivity" />
+        <activity android:name=".MinaUdpServerActivity" />
     </application>
 
 </manifest>

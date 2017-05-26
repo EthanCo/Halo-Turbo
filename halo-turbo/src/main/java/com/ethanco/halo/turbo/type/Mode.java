@@ -6,5 +6,7 @@ package com.ethanco.halo.turbo.type;
 public enum Mode {
     MINA_NIO_TCP_CLIENT,
     MINA_NIO_TCP_SERVER,
+    MINA_NIO_UDP_CLIENT,
+    MINA_NIO_UDP_SERVER,
     MULTICAST,
 }
