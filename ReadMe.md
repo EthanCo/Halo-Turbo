@@ -15,7 +15,7 @@ Add it in your root build.gradle at the end of repositories:
 ### Step 2. Add the dependency  
 
 	dependencies {
-        compile 'com.github.EthanCo.Halo-Turbo:halo-turbo:2.1.5'
+		compile 'com.github.EthanCo.Halo-Turbo:halo-turbo:2.1.5'
 		compile 'com.github.EthanCo.Halo-Turbo:halo-turbo-mina:2.1.5'
 		compile 'com.github.EthanCo.Halo-Turbo:json-convertor:2.1.5'
 	}
