@@ -126,7 +126,7 @@ ObjectJsonByteConvertor:如果是Object对象，则先转换为json字符串后�
 如果需要自定义分隔标识符，可以进行如下设置。  
 
 	builder.setCodec(new TextLineCodecFactory( Charset.forName(编码格式 - 比如UTF-8), encode的分隔标识符, decode的分隔标识符)  
- 
+
 如果不是发送String类型的数据，需要通过builder.setCodec设置不同的解码类  
 TextLineCodecFactory：基于文本的，根据回车换行来断点传输数据  
 ProtocolCodecFactory：自定义协议的编解码数据传输  
