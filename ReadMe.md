@@ -32,7 +32,7 @@ Add it in your root build.gradle at the end of repositories:
             .setMode(Mode.MINA_NIO_TCP_CLIENT)
             .setTargetIP(targetIP)
             .setTargetPort(19701)
-			.addHandler(new DemoHandler())
+	    .addHandler(new DemoHandler())
             .build();  
 	boolean result = halo.start();
 
@@ -41,7 +41,7 @@ Add it in your root build.gradle at the end of repositories:
 	 Halo halo = new Halo.Builder()
             .setMode(Mode.MINA_NIO_TCP_SERVER)
             .setSourcePort(19701)
-			.addHandler(new DemoHandler())
+	    .addHandler(new DemoHandler())
             .build();
 	boolean result = halo.start();
 
@@ -122,15 +122,15 @@ ObjectJsonByteConvertor:如果是Object对象，则先转换为json字符串后�
 ## setCodec
 现仅用作Mina设置ProtocolCodecFactory
 
-默认情况下，Halo-Turbo是用于接收、发送String类型数据，每条数据的结尾都会加上\n用于区分多条数据。(如果是普通的Socket 发送数据给Halo-Turbo，普通Socket发送的数据在发送时需要手动在数据末尾添加\n)
-如果需要自定义分隔标识符，可以进行如下设置。
-builder.setCodec(new TextLineCodecFactory( Charset.forName(编码格式 - 比如UTF-8), encode的分隔标识符, decode的分隔标识符)
-
-如果不是发送String类型的数据，需要通过builder.setCodec设置不同的解码类
-TextLineCodecFactory：基于文本的，根据回车换行来断点传输数据
-ProtocolCodecFactory：自定义协议的编解码数据传输
-ObjectSerializationCodecFactory：对象序列化传输
-DemuxingProtocolCodecFactory：复用传输
+默认情况下，Halo-Turbo是用于接收、发送String类型数据，每条数据的结尾都会加上\n用于区分多条数据。(如果是普通的Socket 发送数据给Halo-Turbo，普通Socket发送的数据在发送时需要手动在数据末尾添加\n)  
+如果需要自定义分隔标识符，可以进行如下设置。  
+`builder.setCodec(new TextLineCodecFactory( Charset.forName(编码格式 - 比如UTF-8), encode的分隔标识符, decode的分隔标识符)`  
+ 
+如果不是发送String类型的数据，需要通过builder.setCodec设置不同的解码类  
+TextLineCodecFactory：基于文本的，根据回车换行来断点传输数据  
+ProtocolCodecFactory：自定义协议的编解码数据传输  
+ObjectSerializationCodecFactory：对象序列化传输  
+DemuxingProtocolCodecFactory：复用传输  
 
 ## 其他  
 
