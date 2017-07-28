@@ -99,21 +99,21 @@ public class MinaTcpServerByteActivity extends AppCompatActivity {
         public void messageReceived(ISession session, Object message) {
             //session.write("这是服务端，我已经收到数据了 --->>>666");
             session.write(new byte[]{0x09, 0x09, 0x09});
-            printInfo(message);
+            printInfo("接收:", message);
         }
 
         @Override
         public void messageSent(ISession session, Object message) {
             super.messageSent(session, message);
-            printInfo(message);
+            printInfo("发送:", message);
         }
     }
 
-    private void printInfo(Object message) {
+    private void printInfo(String operation, Object message) {
         if (message instanceof byte[] || message instanceof Byte[]) {
-            binding.tvInfo.append("接收:" + HexUtil.bytesToHexString((byte[]) message) + "\r\n");
+            binding.tvInfo.append(operation + HexUtil.bytesToHexString((byte[]) message) + "\r\n");
         } else {
-            binding.tvInfo.append("接收:" + message + "\r\n");
+            binding.tvInfo.append(operation + message + "\r\n");
         }
     }
 }

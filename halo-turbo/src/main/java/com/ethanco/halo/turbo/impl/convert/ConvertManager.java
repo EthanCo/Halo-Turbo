@@ -5,7 +5,7 @@ import com.ethanco.halo.turbo.ads.IConvertor;
 import java.util.List;
 
 /**
- * TODO
+ * IConvertor 管理类
  *
  * @author EthanCo
  * @since 2017/1/20

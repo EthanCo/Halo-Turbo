@@ -29,35 +29,51 @@ Add it in your root build.gradle at the end of repositories:
 ### TCP client
 
 	Halo halo = new Halo.Builder()
-            .setMode(Mode.MINA_NIO_TCP_CLIENT)
-            .setTargetIP(targetIP)
-            .setTargetPort(19701)
-	    .addHandler(new DemoHandler())
-            .build();  
+        .setMode(Mode.MINA_NIO_TCP_CLIENT)
+        .setTargetIP(targetIP)
+        .setTargetPort(19701)
+    	.addHandler(new DemoHandler())
+        .build();  
 	boolean result = halo.start();
 
 ### TCP Server  
 
 	 Halo halo = new Halo.Builder()
-            .setMode(Mode.MINA_NIO_TCP_SERVER)
-            .setSourcePort(19701)
-	    .addHandler(new DemoHandler())
-            .build();
+        .setMode(Mode.MINA_NIO_TCP_SERVER)
+        .setSourcePort(19701)
+    	.addHandler(new DemoHandler())
+        .build();
 	boolean result = halo.start();
 
 ### 组播  
 
 	Halo halo = new Halo.Builder()
-            .setMode(Mode.MULTICAST)
-            .setSourcePort(19601)
-            .setTargetPort(19602)
-            .setTargetIP("224.0.0.1")
-            .addHandler(new DemoHandler())
-            .build();
+        .setMode(Mode.MULTICAST)
+        .setSourcePort(19601)
+        .setTargetPort(19602)
+        .setTargetIP("224.0.0.1")
+        .addHandler(new DemoHandler())
+        .build();
 	boolean result = halo.start();  
 
-### UDP  
-//TODO 待实现
+### UDP Client  
+
+	halo = new Halo.Builder()
+        .setMode(Mode.MINA_NIO_UDP_CLIENT)
+        .setTargetIP(targetIP)
+        .setTargetPort(19701)
+        .setContext(context)
+        .build();
+	boolean result = halo.start(); 
+
+### UDP Server
+	
+	halo = new Halo.Builder()
+        .setMode(Mode.MINA_NIO_UDP_SERVER)
+        .setSourcePort(19701)
+        .setContext(context)
+        .build();
+	boolean result = halo.start();
 
 ### 添加回调处理  
 

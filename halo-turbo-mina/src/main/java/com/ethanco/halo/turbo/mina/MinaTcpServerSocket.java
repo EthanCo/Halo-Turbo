@@ -49,7 +49,7 @@ public class MinaTcpServerSocket extends AbstractSocket {
         acceptor.getSessionConfig().setReadBufferSize(config.bufferSize);
         acceptor.getSessionConfig().setIdleTime(IdleStatus.WRITER_IDLE, 10);
         acceptor.setReuseAddress(true); //避免重启时提示地址被占用
-        //设置主服务监听端口的监听队列的最大值为100，如果当前已经有100个连接，再新的连接来将被服务器拒绝
+        //设置主服务监听端口的监听队列的最大值为100，如果当前已经有100个连接，新的连接将被服务器拒绝
         //acceptor.setBacklog(100);
     }
 

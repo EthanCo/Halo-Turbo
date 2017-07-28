@@ -61,8 +61,6 @@ public class Halo extends AbstractHalo {
 
     public static class Builder extends Config {
 
-        private ISocket ihalo;
-
         public Builder() {
             this.mode = Mode.MINA_NIO_TCP_CLIENT;
             this.targetIP = "192.168.1.1";
@@ -103,11 +101,6 @@ public class Halo extends AbstractHalo {
 
         public Builder setBufferSize(int bufferSize) {
             this.bufferSize = bufferSize;
-            return this;
-        }
-
-        public Builder setIhalo(ISocket ihalo) {
-            this.ihalo = ihalo;
             return this;
         }
 
