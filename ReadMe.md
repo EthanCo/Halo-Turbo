@@ -20,7 +20,7 @@ Add it in your root build.gradle at the end of repositories:
 		compile 'com.github.EthanCo.Halo-Turbo:json-convertor:2.1.5'
 	}
 
-> halo-turbo是核心库，带有有组播功能  
+> halo-turbo是核心库，带有组播功能  
 > halo-turbo-mina:使用TCP需依赖此库  
 > json-convertor:将需发送的对象自动转换为json字符串
 
@@ -31,7 +31,7 @@ Add it in your root build.gradle at the end of repositories:
 	Halo halo = new Halo.Builder()
         .setMode(Mode.MINA_NIO_TCP_CLIENT)
         .setTargetIP(targetIP)
-        .setTargetPort(19701)
+		.setTargetPort(19701)
     	.addHandler(new DemoHandler())
         .build();  
 	boolean result = halo.start();
@@ -40,8 +40,8 @@ Add it in your root build.gradle at the end of repositories:
 
 	 Halo halo = new Halo.Builder()
         .setMode(Mode.MINA_NIO_TCP_SERVER)
-        .setSourcePort(19701)
-    	.addHandler(new DemoHandler())
+		.setSourcePort(19701)
+		.addHandler(new DemoHandler())
         .build();
 	boolean result = halo.start();
 
