@@ -101,6 +101,31 @@ Add it in your root build.gradle at the end of repositories:
 	    void messageSent(ISession session, Object message);
 	}  
 
+## 添加心跳
+添加心跳后，如果是Client端，如进行断线，会自动进行断线重现
+
+	 builder.setKeepAlive(new KeepAlive(15, 60, new IKeepAliveListener() {
+        @Override
+        public void onKeepAliveRequestTimedOut(KeepAlive keepAlive, ISession iSession) {
+            //心跳超时
+        }
+
+        @Override
+        public boolean isKeepAliveMessage(ISession ioSession, Object message) {
+            //是否是心跳
+        }
+
+        @Override
+        public Object getKeepAliveMessage(ISession ioSession, Object o) {
+            //返回心跳数据
+        }
+    }))
+
+> KeepAlive  
+> interval:每次心跳的间隔时间  
+> timeout:心跳未收到的超时时间  
+> reConnTime:重连间隔时间，默认60秒一次  
+
 ## 添加日志打印  
 
 	new Halo.Builder().addHandler(new StringLogHandler(TAG))  
