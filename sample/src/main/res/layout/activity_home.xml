@@ -64,7 +64,7 @@
                 <TextView
                     android:id="@+id/tv_common_tcp_client"
                     style="@style/HomeItemText"
-                    android:text="COMMON TCP SERVER BYTE ACTIVITY" />
+                    android:text="COMMON TCP SERVER ACTIVITY" />
 
                 <include layout="@layout/include_divider" />
 
@@ -82,6 +82,19 @@
 
                 <include layout="@layout/include_divider" />
 
+                <TextView
+                    android:id="@+id/tv_mina_tcp_heart_beat_client"
+                    style="@style/HomeItemText"
+                    android:text="MINA CLIENT 心跳" />
+
+                <include layout="@layout/include_divider" />
+
+                <TextView
+                    android:id="@+id/tv_mina_tcp_heart_beat_server"
+                    style="@style/HomeItemText"
+                    android:text="MINA SERVER 心跳" />
+
+                <include layout="@layout/include_divider" />
 
             </LinearLayout>
         </ScrollView>

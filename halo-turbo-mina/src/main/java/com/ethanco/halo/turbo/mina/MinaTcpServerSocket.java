@@ -8,6 +8,7 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.keepalive.KeepAliveFilter;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import static com.ethanco.halo.turbo.mina.MinaUtil.CODEC;
+import static com.ethanco.halo.turbo.mina.MinaUtil.HEARTBEAT;
 import static com.ethanco.halo.turbo.mina.MinaUtil.LOGGER;
 import static com.ethanco.halo.turbo.mina.MinaUtil.convertToISession;
 
@@ -49,8 +51,13 @@ public class MinaTcpServerSocket extends AbstractSocket {
         acceptor.getSessionConfig().setReadBufferSize(config.bufferSize);
         acceptor.getSessionConfig().setIdleTime(IdleStatus.WRITER_IDLE, 10);
         acceptor.setReuseAddress(true); //避免重启时提示地址被占用
-        //设置主服务监听端口的监听队列的最大值为100，如果当前已经有100个连接，新的连接将被服务器拒绝
-        //acceptor.setBacklog(100);
+        //设置主服务监听端口的监听队列的最大值为50，如果当前已经有50个连接，新的连接将被服务器拒绝
+        acceptor.setBacklog(50);
+
+        KeepAliveFilter keepAliveFilter = MinaUtil.initServerKeepAlive(config, this);
+        if (keepAliveFilter != null) {
+            acceptor.getFilterChain().addLast(HEARTBEAT, keepAliveFilter);
+        }
     }
 
     @Override

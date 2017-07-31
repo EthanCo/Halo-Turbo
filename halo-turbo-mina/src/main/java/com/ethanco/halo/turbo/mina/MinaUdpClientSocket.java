@@ -15,12 +15,14 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.keepalive.KeepAliveFilter;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioDatagramConnector;
 
 import java.net.InetSocketAddress;
 
 import static com.ethanco.halo.turbo.mina.MinaUtil.CODEC;
+import static com.ethanco.halo.turbo.mina.MinaUtil.HEARTBEAT;
 import static com.ethanco.halo.turbo.mina.MinaUtil.LOGGER;
 import static com.ethanco.halo.turbo.mina.MinaUtil.convertToISession;
 
@@ -41,8 +43,6 @@ public class MinaUdpClientSocket extends AbstractSocket {
     }
 
     private void init(Config config) {
-
-
         connector = new NioDatagramConnector();
         connector.setHandler(new MinaClientHandler());
         DefaultIoFilterChainBuilder chain = connector.getFilterChain();
@@ -57,7 +57,10 @@ public class MinaUdpClientSocket extends AbstractSocket {
         connector.getSessionConfig().setReadBufferSize(config.bufferSize);
         connector.getSessionConfig().setIdleTime(IdleStatus.WRITER_IDLE, 10);
         connector.getSessionConfig().setBroadcast(true);
-
+        KeepAliveFilter keepAliveFilter = MinaUtil.initClientKeepAlive(config, this);
+        if (keepAliveFilter != null) {
+            connector.getFilterChain().addLast(HEARTBEAT, keepAliveFilter);
+        }
     }
 
     @Override
@@ -84,7 +87,7 @@ public class MinaUdpClientSocket extends AbstractSocket {
             public void operationComplete(IoFuture future) {
                 ConnectFuture connFuture = (ConnectFuture) future;
                 if (connFuture.isConnected()) {
-                    synchronized (MinaUdpClientSocket.this){
+                    synchronized (MinaUdpClientSocket.this) {
                         session = MinaUtil.convertToISession(future.getSession(), MinaUdpClientSocket.this);
                         onStartSuccess();
                     }

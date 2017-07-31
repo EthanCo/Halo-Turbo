@@ -83,6 +83,7 @@ Add it in your root build.gradle at the end of repositories:
 1. 可通过addHandler()设置回调  
 2. 可使用session来发送数据和管理连接  
 
+#####
 	public interface IHandler {
 	    //会话(session)创建之后，回调该方法
 	    void sessionCreated(ISession session);

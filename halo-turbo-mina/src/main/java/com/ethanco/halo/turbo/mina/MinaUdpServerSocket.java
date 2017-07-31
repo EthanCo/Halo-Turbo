@@ -12,6 +12,7 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.keepalive.KeepAliveFilter;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.DatagramSessionConfig;
 import org.apache.mina.transport.socket.nio.NioDatagramAcceptor;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import static com.ethanco.halo.turbo.mina.MinaUtil.CODEC;
+import static com.ethanco.halo.turbo.mina.MinaUtil.HEARTBEAT;
 import static com.ethanco.halo.turbo.mina.MinaUtil.LOGGER;
 import static com.ethanco.halo.turbo.mina.MinaUtil.convertToISession;
 
@@ -41,8 +43,6 @@ public class MinaUdpServerSocket extends AbstractSocket {
     }
 
     private void init(Config config) {
-
-
         address = new InetSocketAddress(config.sourcePort);
 
         acceptor = new NioDatagramAcceptor();
@@ -61,6 +61,11 @@ public class MinaUdpServerSocket extends AbstractSocket {
         dcfg.setReadBufferSize(config.bufferSize);
         dcfg.setIdleTime(IdleStatus.WRITER_IDLE, 10);
         dcfg.setBroadcast(true);
+
+        KeepAliveFilter keepAliveFilter = MinaUtil.initServerKeepAlive(config, this);
+        if (keepAliveFilter != null) {
+            acceptor.getFilterChain().addLast(HEARTBEAT, keepAliveFilter);
+        }
     }
 
 

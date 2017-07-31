@@ -83,4 +83,8 @@ public abstract class BaseLogHandler extends AbstractLog {
     public void onReceiveException(Exception e) {
         printLog(getPrefix() + " onReceiveException:" + e.getMessage());
     }
+
+    public void onKeepAliveTimeOut() {
+        printLog(getPrefix() + ">>> keepAlive TimeOut...");
+    }
 }

@@ -221,11 +221,11 @@ public abstract class AbstractSocket implements ISocket, ILog {
         });
     }
 
-    protected interface LogListener {
+    public interface LogListener {
         void onExec(ILog log);
     }
 
-    protected void execLog(final LogListener logListener) {
+    public void execLog(final LogListener logListener) {
         M.post(new Runnable() {
             @Override
             public void run() {

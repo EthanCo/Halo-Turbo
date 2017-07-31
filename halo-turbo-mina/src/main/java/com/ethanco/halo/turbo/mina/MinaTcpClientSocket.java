@@ -1,7 +1,10 @@
 package com.ethanco.halo.turbo.mina;
 
+import android.os.SystemClock;
+
 import com.ethanco.halo.turbo.ads.AbstractSocket;
 import com.ethanco.halo.turbo.bean.Config;
+import com.ethanco.halo.turbo.bean.KeepAlive;
 
 import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.service.IoHandlerAdapter;
@@ -9,12 +12,15 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.keepalive.KeepAliveFilter;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.ExecutorService;
 
 import static com.ethanco.halo.turbo.mina.MinaUtil.CODEC;
+import static com.ethanco.halo.turbo.mina.MinaUtil.HEARTBEAT;
 import static com.ethanco.halo.turbo.mina.MinaUtil.LOGGER;
 import static com.ethanco.halo.turbo.mina.MinaUtil.convertToISession;
 
@@ -29,6 +35,8 @@ public class MinaTcpClientSocket extends AbstractSocket {
     private InetSocketAddress address;
     private NioSocketConnector connector;
     private IoSession mSession;
+    private volatile boolean isAutoReConn = true;
+    private boolean isClosed = false;
 
     public MinaTcpClientSocket(Config config) {
         super(config);
@@ -43,17 +51,22 @@ public class MinaTcpClientSocket extends AbstractSocket {
         }
         if (connector.getFilterChain().get(CODEC) == null) {
             ProtocolCodecFactory codecFactory = config.codec == null ?
-                    MinaUtil.getTextLineCodecFactory()  : (ProtocolCodecFactory) config.codec;
+                    MinaUtil.getTextLineCodecFactory() : (ProtocolCodecFactory) config.codec;
             connector.getFilterChain().addLast(CODEC, new ProtocolCodecFilter(codecFactory));
         }
         connector.setHandler(new MinaClientHandler());
         connector.getSessionConfig().setReadBufferSize(config.bufferSize);
         connector.getSessionConfig().setIdleTime(IdleStatus.WRITER_IDLE, 10);
+        KeepAliveFilter keepAliveFilter = MinaUtil.initClientKeepAlive(config, this);
+        if (keepAliveFilter != null) {
+            connector.getFilterChain().addLast(HEARTBEAT, keepAliveFilter);
+        }
     }
 
     @Override
     public boolean start() {
         super.start();
+        isAutoReConn = true;
         if (isRunning()) {
             return false;
         }
@@ -76,6 +89,7 @@ public class MinaTcpClientSocket extends AbstractSocket {
     @Override
     public void stop() {
         super.stop();
+        isAutoReConn = false;
         if (connector == null) {
             return;
         }
@@ -95,7 +109,7 @@ public class MinaTcpClientSocket extends AbstractSocket {
         if (connector == null) {
             return false;
         }
-        return connector.isActive();
+        return connector.isActive() && !isClosed;
     }
 
     private class MinaClientHandler extends IoHandlerAdapter {
@@ -108,6 +122,7 @@ public class MinaTcpClientSocket extends AbstractSocket {
         @Override
         public void sessionOpened(IoSession session) throws Exception {
             super.sessionOpened(session);
+            isClosed = false;
             MinaTcpClientSocket.this.sessionOpened(convertToISession(session, MinaTcpClientSocket.this));
         }
 
@@ -127,7 +142,34 @@ public class MinaTcpClientSocket extends AbstractSocket {
         @Override
         public void sessionClosed(IoSession session) throws Exception {
             super.sessionClosed(session);
+            isClosed = true;
             MinaTcpClientSocket.this.sessionClosed(convertToISession(session, MinaTcpClientSocket.this));
+
+            synchronized (this) {
+                if (!isAutoReConn) return;
+                if (isRunning()) return;
+                ExecutorService threadPool = config.threadPool;
+                final KeepAlive keepAlive = config.keepAlive;
+                System.out.println("hello world1!:" + threadPool);
+
+                new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+
+                        boolean reConn = isAutoReConn && !isRunning();
+                        System.out.println("开始重连 reConn:" + reConn);
+                        do {
+                            init(config);
+                            MinaTcpClientSocket.this.start();
+                            System.out.println("开始重连-->Sleep:" + keepAlive.getReConnTime());
+                            SystemClock.sleep(keepAlive.getReConnTime());
+                            reConn = isAutoReConn && !isRunning();
+                            System.out.println("开始重连--->reConn:" + reConn);
+                        } while (reConn);
+                    }
+                }.start();
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ import com.ethanco.halo.turbo.ads.IConvertor;
 import com.ethanco.halo.turbo.ads.IHandler;
 import com.ethanco.halo.turbo.ads.ISocket;
 import com.ethanco.halo.turbo.bean.Config;
+import com.ethanco.halo.turbo.bean.KeepAlive;
 import com.ethanco.halo.turbo.type.Mode;
 
 import java.util.ArrayList;
@@ -138,6 +139,12 @@ public class Halo extends AbstractHalo {
 
         public Builder setContext(Context context) {
             this.context = context;
+            return this;
+        }
+
+        //设置心跳
+        public Builder setKeepAlive(KeepAlive keepAlive) {
+            this.keepAlive = keepAlive;
             return this;
         }
 

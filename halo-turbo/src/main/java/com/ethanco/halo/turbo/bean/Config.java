@@ -35,4 +35,6 @@ public class Config {
     public Object codec;
 
     public Context context;
+
+    public KeepAlive keepAlive;
 }
