@@ -102,7 +102,7 @@ Add it in your root build.gradle at the end of repositories:
 	}  
 
 ## 添加心跳
-添加心跳后，如果是Client端，如进行断线，会自动进行断线重现
+添加心跳后，如果是Client端，如进行断线，会自动进行断线重连
 
 	 builder.setKeepAlive(new KeepAlive(15, 60, new IKeepAliveListener() {
         @Override
