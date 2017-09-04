@@ -145,6 +145,7 @@ public class MinaTcpClientSocket extends AbstractSocket {
             isClosed = true;
             MinaTcpClientSocket.this.sessionClosed(convertToISession(session, MinaTcpClientSocket.this));
 
+            //断线重连 详见:https://my.oschina.net/yjwxh/blog/174633
             synchronized (this) {
                 if (!isAutoReConn) return;
                 if (isRunning()) return;
