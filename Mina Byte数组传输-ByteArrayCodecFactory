@@ -1,0 +1,88 @@
+public class ByteArrayCodecFactory implements ProtocolCodecFactory {
+    private ByteArrayDecoder decoder;
+    private ByteArrayEncoder encoder;
+
+    public ByteArrayCodecFactory() {
+        encoder = new ByteArrayEncoder();
+        decoder = new ByteArrayDecoder();
+    }
+
+    @Override
+    public ProtocolEncoder getEncoder(IoSession ioSession) throws Exception {
+        return encoder;
+    }
+
+    @Override
+    public ProtocolDecoder getDecoder(IoSession ioSession) throws Exception {
+        return decoder;
+    }
+
+    //解码
+    private class ByteArrayDecoder extends CumulativeProtocolDecoder {
+
+
+        @Override
+        protected boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
+            if (in.remaining() > 6) {//有数据时，读取前8字节判断消息长度
+
+                byte[] sizeBytes = new byte[7];
+
+                in.mark();//标记当前位置，以便reset
+
+                //因为我的前数据包的长度是保存在第6-7字节中，
+
+                in.get(sizeBytes, 0, 7);//读取4字节
+
+                String strHead = bytesToString(sizeBytes,0,4);
+                if (!"HOPE".equalsIgnoreCase(strHead)) {
+                    in.clear();
+                    return true;
+                }
+
+                int size = DataTypeUtil.getInt(sizeBytes, 5) + 7;
+
+                in.reset();
+
+                if (size > in.remaining()) {//如果消息内容不够，则重置，相当于不读取size
+
+                    return false;//父类接收新数据，以拼凑成完整数据
+
+                } else {
+
+                    byte[] bytes = new byte[size];
+
+                    in.get(bytes, 0, size);
+
+                    //把字节转换为Java对象的工具类
+                    out.write(bytes);
+
+                    if (in.remaining() > 0) {//如果读取内容后还粘了包，就让父类再重读  一次，进行下一次解析
+
+                        return true;
+
+                    }
+
+                }
+
+            }
+            return false;//处理成功，让父类进行接收下个包
+        }
+    }
+
+    //编码
+    private class ByteArrayEncoder extends ProtocolEncoderAdapter {
+        @Override
+        public void encode(IoSession session, Object message,
+                           ProtocolEncoderOutput out) {
+            byte[] bytes = (byte[]) message;
+
+            IoBuffer buffer = IoBuffer.allocate(256);
+            buffer.setAutoExpand(true);
+            buffer.put(bytes);
+            buffer.flip();
+            out.write(buffer);
+            out.flush();
+            buffer.free();
+        }
+    }
+}
