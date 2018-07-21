@@ -163,8 +163,9 @@ public class MinaTcpClientSocket extends AbstractSocket {
                         do {
                             init(config);
                             MinaTcpClientSocket.this.start();
-                            System.out.println("开始重连-->Sleep:" + keepAlive.getReConnTime());
-                            SystemClock.sleep(keepAlive.getReConnTime());
+                            int reConnTime = keepAlive == null ? 60 : keepAlive.getReConnTime();
+                            System.out.println("开始重连-->Sleep:" + reConnTime);
+                            SystemClock.sleep(reConnTime);
                             reConn = isAutoReConn && !isRunning();
                             System.out.println("开始重连--->reConn:" + reConn);
                         } while (reConn);

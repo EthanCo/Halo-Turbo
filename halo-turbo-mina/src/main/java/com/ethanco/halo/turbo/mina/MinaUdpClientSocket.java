@@ -2,6 +2,7 @@ package com.ethanco.halo.turbo.mina;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 
 import com.ethanco.halo.turbo.ads.AbstractSocket;
 import com.ethanco.halo.turbo.bean.Config;
@@ -19,6 +20,7 @@ import org.apache.mina.filter.keepalive.KeepAliveFilter;
 import org.apache.mina.filter.logging.LoggingFilter;
 import org.apache.mina.transport.socket.nio.NioDatagramConnector;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 import static com.ethanco.halo.turbo.mina.MinaUtil.CODEC;
@@ -55,6 +57,7 @@ public class MinaUdpClientSocket extends AbstractSocket {
             chain.addLast(CODEC, new ProtocolCodecFilter(codecFactory));
         }
         connector.getSessionConfig().setReadBufferSize(config.bufferSize);
+
         connector.getSessionConfig().setIdleTime(IdleStatus.WRITER_IDLE, 10);
         connector.getSessionConfig().setBroadcast(true);
         KeepAliveFilter keepAliveFilter = MinaUtil.initClientKeepAlive(config, this);
@@ -81,7 +84,22 @@ public class MinaUdpClientSocket extends AbstractSocket {
         lock.acquire();
 
         init(config);
-        ConnectFuture future = connector.connect(new InetSocketAddress(config.targetIP, config.targetPort));
+        InetSocketAddress remoteAddress = new InetSocketAddress(config.targetIP, config.targetPort);
+        InetSocketAddress localAddress = null;
+        try {
+            InetAddress localIP = MinaUtil.getLocalHostLANAddress();
+            Log.i("Z--", "localIP:" + localIP.getHostName());
+            localAddress = new InetSocketAddress(localIP, config.sourcePort);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ConnectFuture future;
+        if (localAddress != null) {
+            future = connector.connect(remoteAddress, localAddress);
+        }else{
+            future = connector.connect(remoteAddress);
+        }
         future.awaitUninterruptibly();
         future.addListener(new IoFutureListener() {
             public void operationComplete(IoFuture future) {
