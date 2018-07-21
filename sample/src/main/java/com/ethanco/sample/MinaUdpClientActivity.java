@@ -45,6 +45,7 @@ public class MinaUdpClientActivity extends AppCompatActivity {
                                     .setBufferSize(2048)
                                     .setTargetIP(targetIP)
                                     .setTargetPort(19701)
+                                    //.setSourcePort(57880) 设置本地端口
                                     .setContext(getApplicationContext())
                                     .addHandler(new StringLogHandler(TAG))
                                     .addHandler(new DemoHandler())
