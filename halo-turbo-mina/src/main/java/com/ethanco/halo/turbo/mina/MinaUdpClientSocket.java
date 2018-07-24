@@ -2,7 +2,6 @@ package com.ethanco.halo.turbo.mina;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 
 import com.ethanco.halo.turbo.ads.AbstractSocket;
 import com.ethanco.halo.turbo.bean.Config;
@@ -88,7 +87,6 @@ public class MinaUdpClientSocket extends AbstractSocket {
         InetSocketAddress localAddress = null;
         try {
             InetAddress localIP = MinaUtil.getLocalHostLANAddress();
-            Log.i("Z--", "localIP:" + localIP.getHostName());
             localAddress = new InetSocketAddress(localIP, config.sourcePort);
         } catch (Exception e) {
             e.printStackTrace();

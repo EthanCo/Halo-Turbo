@@ -34,11 +34,12 @@ public class ObjectJsonConvertor implements IConvertor {
 
     @Override
     public Object receiveConvert(Object message) {
-        if (message instanceof byte[] || message instanceof Byte[]) {
-            return new String((byte[]) message).trim();
-        } else if (message instanceof String) {
-            return ((String) (message)).trim();
-        }
         return message;
+        /*if (message instanceof byte[] || message instanceof Byte[]) {
+            return message;//new String((byte[]) message).trim();
+        } else if (message instanceof String) {
+            return message;//((String) (message)).trim();
+        }
+        return message;*/
     }
 }

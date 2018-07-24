@@ -147,10 +147,12 @@ public class MinaTcpClientSocket extends AbstractSocket {
 
             //断线重连 详见:https://my.oschina.net/yjwxh/blog/174633
             synchronized (this) {
+
                 if (!isAutoReConn) return;
                 if (isRunning()) return;
                 ExecutorService threadPool = config.threadPool;
                 final KeepAlive keepAlive = config.keepAlive;
+                if (keepAlive != null) return; //如果keepAlive不为NULL，则交由keepAlive进行重连处理
                 System.out.println("hello world1!:" + threadPool);
 
                 new Thread() {
