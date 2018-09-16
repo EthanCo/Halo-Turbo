@@ -3,6 +3,7 @@ package com.ethanco.halo.turbo;
 import com.ethanco.halo.turbo.ads.ISocket;
 import com.ethanco.halo.turbo.bean.Config;
 import com.ethanco.halo.turbo.impl.socket.MulticastSocket;
+import com.ethanco.halo.turbo.impl.socket.UdpClientSocket;
 import com.ethanco.halo.turbo.type.Mode;
 
 import java.lang.reflect.Constructor;
@@ -19,6 +20,8 @@ class SocketFactory {
 
         if (mode == Mode.MULTICAST) {
             haloImpl = new MulticastSocket(config);
+        } else if(mode == Mode.UDP_CLIENT){
+            haloImpl = new UdpClientSocket(config);
         } else {
             haloImpl = createByReflect(mode, config);
         }

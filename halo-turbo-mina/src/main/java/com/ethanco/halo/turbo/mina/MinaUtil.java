@@ -15,7 +15,6 @@ import org.apache.mina.filter.keepalive.KeepAliveFilter;
 import org.apache.mina.filter.keepalive.KeepAliveMessageFactory;
 import org.apache.mina.filter.keepalive.KeepAliveRequestTimeoutHandler;
 
-import java.lang.ref.WeakReference;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
@@ -38,17 +37,18 @@ public class MinaUtil {
     //public static Map<IoSession, ISession> sessionMap = new WeakHashMap<>();
     public static Map<IoSession, ISession> sessionMap = new HashMap<>();
 
-    public static ISession convertToISession(final IoSession ioSession, final AbstractSocket socket) {
+    public static ISession convertToISession(final IoSession ioSession, final AbstractSocket _socket) {
         ISession session = sessionMap.get(ioSession);
 
         if (session == null) {
             session = new ISession() {
-                WeakReference<AbstractSocket> socketRef = new WeakReference<>(socket);
+                private AbstractSocket socket = _socket;
+                //WeakReference<AbstractSocket> socketRef = new WeakReference<>(socket);
 
                 @Override
                 public void write(final Object message) {
                     final ISession finalSession = this;
-                    final AbstractSocket socket = socketRef.get();
+                    //final AbstractSocket socket = socketRef.get();
                     if (socket == null) {
                         return;
                     }
@@ -66,7 +66,8 @@ public class MinaUtil {
                 @Override
                 public void close() {
                     sessionMap.remove(ioSession);
-                    socketRef.clear();
+                    //socketRef.clear();
+                    socket = null;
                     ioSession.closeOnFlush();
                     //ioSession.closeNow();
                 }

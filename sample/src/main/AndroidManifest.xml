@@ -28,6 +28,7 @@
         <activity android:name=".MinaUdpServerActivity" />
         <activity android:name=".MinaTcpClientHeartBeatActivity" />
         <activity android:name=".MinaTcpServerHeartBeatActivity" />
+        <activity android:name=".UdpClientActivity" />
     </application>
 
 </manifest>

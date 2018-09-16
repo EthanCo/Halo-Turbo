@@ -9,4 +9,5 @@ public enum Mode {
     MINA_NIO_UDP_CLIENT,
     MINA_NIO_UDP_SERVER,
     MULTICAST,
+    UDP_CLIENT,
 }

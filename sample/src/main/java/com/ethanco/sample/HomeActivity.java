@@ -94,6 +94,13 @@ public class HomeActivity extends AppCompatActivity {
                 actionStartAty(MinaTcpServerHeartBeatActivity.class);
             }
         });
+
+        binding.tvUdpClient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                actionStartAty(UdpClientActivity.class);
+            }
+        });
     }
 
     private void actionStartAty(Class<? extends Activity> cls) {

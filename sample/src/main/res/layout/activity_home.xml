@@ -96,6 +96,13 @@
 
                 <include layout="@layout/include_divider" />
 
+                <TextView
+                    android:id="@+id/tv_udp_client"
+                    style="@style/HomeItemText"
+                    android:text="Udp Client" />
+
+                <include layout="@layout/include_divider" />
+
             </LinearLayout>
         </ScrollView>
     </FrameLayout>
