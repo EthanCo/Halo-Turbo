@@ -221,6 +221,26 @@ public abstract class AbstractSocket implements ISocket, ILog {
         });
     }
 
+    @Override
+    public void onReConnecting() {
+        execLog(new LogListener() {
+            @Override
+            public void onExec(ILog log) {
+                log.onReConnecting();
+            }
+        });
+    }
+
+    @Override
+    public void onReConnected() {
+        execLog(new LogListener() {
+            @Override
+            public void onExec(ILog log) {
+                log.onReConnected();
+            }
+        });
+    }
+
     public interface LogListener {
         void onExec(ILog log);
     }

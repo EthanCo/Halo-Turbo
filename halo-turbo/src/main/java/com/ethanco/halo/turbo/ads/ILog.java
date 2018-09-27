@@ -19,4 +19,8 @@ public interface ILog extends IHandler {
     void onStopped();
 
     void onReceiveException(Exception e);
+
+    void onReConnecting();
+
+    void onReConnected();
 }
