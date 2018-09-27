@@ -1,7 +1,7 @@
 package com.ethanco.halo.turbo.ads;
 
 /**
- * TODO
+ * Log接口
  *
  * @author EthanCo
  * @since 2017/1/18
