@@ -90,6 +90,11 @@ public abstract class BaseLogHandler extends AbstractLog {
     }
 
     @Override
+    public void onReConnectFailed(Exception e) {
+        printLog(getPrefix() + " onReConnectFailed:" + e.getMessage());
+    }
+
+    @Override
     public void onReceiveException(Exception e) {
         printLog(getPrefix() + " onReceiveException:" + e.getMessage());
     }

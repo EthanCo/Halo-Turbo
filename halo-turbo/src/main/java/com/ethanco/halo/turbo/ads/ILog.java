@@ -23,4 +23,6 @@ public interface ILog extends IHandler {
     void onReConnecting();
 
     void onReConnected();
+
+    void onReConnectFailed(Exception e);
 }

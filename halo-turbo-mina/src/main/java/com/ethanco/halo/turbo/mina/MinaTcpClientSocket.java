@@ -154,16 +154,14 @@ public class MinaTcpClientSocket extends AbstractSocket {
                 final KeepAlive keepAlive = config.keepAlive;
                 if (keepAlive != null) return; //如果keepAlive不为NULL，则交由keepAlive进行重连处理
 
-                new Thread() {
+                threadPool.execute(new Runnable() {
                     @Override
                     public void run() {
-                        super.run();
-
                         boolean reConn = isAutoReConn && !isRunning();
                         System.out.println("开始重连 reConn:" + reConn);
-                        onReConnecting();
                         do {
                             try {
+                                onReConnecting();
                                 MinaTcpClientSocket.this.stop();
 
                                 init(config);
@@ -175,11 +173,11 @@ public class MinaTcpClientSocket extends AbstractSocket {
                                 reConn = isAutoReConn && !isRunning();
                                 System.out.println("开始重连--->reConn:" + reConn);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                onReConnectFailed(e);
                             }
                         } while (reConn);
                     }
-                }.start();
+                });
             }
         }
     }
