@@ -15,9 +15,9 @@ Add it in your root build.gradle at the end of repositories:
 ### Step 2. Add the dependency  
 
 	dependencies {
-		compile 'com.github.EthanCo.Halo-Turbo:halo-turbo:2.2.3'
-		compile 'com.github.EthanCo.Halo-Turbo:halo-turbo-mina:2.2.3'
-		compile 'com.github.EthanCo.Halo-Turbo:json-convertor:2.2.3'
+		compile 'com.github.EthanCo.Halo-Turbo:halo-turbo:2.2.4'
+		compile 'com.github.EthanCo.Halo-Turbo:halo-turbo-mina:2.2.4'
+		compile 'com.github.EthanCo.Halo-Turbo:json-convertor:2.2.4'
 	}
 
 > halo-turbo是核心库，带有组播功能  
