@@ -138,9 +138,11 @@ public class MulticastSocket extends AbstractSocket {
         final DatagramPacket packet;
         byte[] rev = new byte[config.bufferSize];
         packet = new DatagramPacket(rev, rev.length);
-        socket.receive(packet);
-        Object receive = receive(packet.getData());
-        messageReceived(session, receive);
+        if (socket != null) {
+            socket.receive(packet);
+            Object receive = receive(packet.getData());
+            messageReceived(session, receive);
+        }
     }
 
     private class DefaultSession extends AbstractSession {
