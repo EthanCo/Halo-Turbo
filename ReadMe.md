@@ -25,7 +25,7 @@ Add it in your root build.gradle at the end of repositories:
 > json-convertor:将需发送的对象自动转换为json字符串
 
 ## 使用 ##
-
+注意 : 以下方法都需要在异步线程中进行调用 !!!
 ### TCP client
 
 	Halo halo = new Halo.Builder()
